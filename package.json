@@ -1,0 +1,26 @@
+{
+  "name": "brain-game",
+  "version": "1.0.0",
+  "description": "Flow State Sanctuary brain training prototype",
+  "main": "main.js",
+  "scripts": {
+    "build:tailwind": "tailwindcss -i ./tailwind.input.css -o ./tailwind.generated.css --minify",
+    "prestart": "npm run build:tailwind",
+    "start": "electron .",
+    "predev": "npm run build:tailwind",
+    "dev": "electron .",
+    "rebuild-native": "electron-rebuild -f -w better-sqlite3",
+    "postinstall": "npm run rebuild-native"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.2.2",
+    "autoprefixer": "^10.4.27",
+    "electron": "^31.3.1",
+    "electron-rebuild": "^3.2.9",
+    "postcss": "^8.5.9",
+    "tailwindcss": "^4.2.2"
+  },
+  "dependencies": {
+    "better-sqlite3": "^12.8.0"
+  }
+}

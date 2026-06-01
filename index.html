@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BrainDash - Cognitive Training</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="tailwind.generated.css" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <svg class="icon-sprite" aria-hidden="true" focusable="false">
+      <symbol id="icon-grid" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="7" height="7" rx="1.2" />
+        <rect x="14" y="3" width="7" height="7" rx="1.2" />
+        <rect x="3" y="14" width="7" height="7" rx="1.2" />
+        <rect x="14" y="14" width="7" height="7" rx="1.2" />
+      </symbol>
+      <symbol id="icon-chart" viewBox="0 0 24 24">
+        <path d="M4 20V4" />
+        <path d="M4 20H20" />
+        <path d="M8 17V11" />
+        <path d="M12 17V8" />
+        <path d="M16 17V13" />
+      </symbol>
+      <symbol id="icon-cog" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3.2" />
+        <path d="M12 3.5V6" />
+        <path d="M12 18V20.5" />
+        <path d="M4.7 7.1L6.5 8.3" />
+        <path d="M17.5 15.7L19.3 16.9" />
+        <path d="M3.5 12H6" />
+        <path d="M18 12H20.5" />
+        <path d="M4.7 16.9L6.5 15.7" />
+        <path d="M17.5 8.3L19.3 7.1" />
+      </symbol>
+      <symbol id="icon-visual" viewBox="0 0 24 24">
+        <path d="M2.8 12C4.8 7.4 8 5 12 5c4 0 7.2 2.4 9.2 7-2 4.6-5.2 7-9.2 7-4 0-7.2-2.4-9.2-7z" />
+        <circle cx="12" cy="12" r="2.6" />
+      </symbol>
+      <symbol id="icon-sound" viewBox="0 0 24 24">
+        <path d="M4 14h3l4 4V6l-4 4H4z" />
+        <path d="M15 9.5c1.2 1.1 1.9 2.5 1.9 4s-.7 2.9-1.9 4" />
+        <path d="M17.9 7c2 1.8 3.1 4 3.1 6.5S19.9 18.2 17.9 20" />
+      </symbol>
+      <symbol id="icon-bolt" viewBox="0 0 24 24">
+        <path d="M13 2L6.5 13h4.8L10 22l7.5-11h-4.8z" />
+      </symbol>
+      <symbol id="icon-memory" viewBox="0 0 24 24">
+        <rect x="3" y="6" width="18" height="12" rx="2" />
+        <path d="M8 3v3" />
+        <path d="M12 3v3" />
+        <path d="M16 3v3" />
+        <path d="M8 18v3" />
+        <path d="M12 18v3" />
+        <path d="M16 18v3" />
+      </symbol>
+    </svg>
+
+    <div class="app-layout">
+      <aside class="sidebar glass">
+        <div class="brand">
+          <p class="brand-title">BrainDash</p>
+          <p class="brand-sub">Luminous Mind</p>
+        </div>
+
+        <nav class="sidebar-nav" aria-label="Main Navigation">
+          <button class="nav-btn active" type="button" data-view="dashboardView">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><use href="#icon-grid"></use></svg>
+            </span>
+            <span>Dashboard</span>
+          </button>
+          <button class="nav-btn" type="button" data-view="statsView">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><use href="#icon-chart"></use></svg>
+            </span>
+            <span>Stats</span>
+          </button>
+          <button class="nav-btn" type="button" data-view="settingsView">
+            <span class="nav-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><use href="#icon-cog"></use></svg>
+            </span>
+            <span>Settings</span>
+          </button>
+        </nav>
+      </aside>
+
+      <section class="main-shell" id="mainShell">
+        <header class="top-status glass home-hidden" id="topStatusBar">
+          <div class="status-line">
+            <span class="status-key">Status</span>
+            <span>Time: <strong id="topTime">02:45</strong></span>
+            <span>Current <strong class="score-highlight" id="topScore">12,400</strong></span>
+          </div>
+          <div class="status-right">
+            <div class="dot-pack" aria-hidden="true">
+              <span></span>
+              <span></span>
+              <span></span>
+            </div>
+            <p id="playerLabel">PLAYER_01</p>
+          </div>
+        </header>
+
+        <main class="view-stack">
+          <section class="view active" id="dashboardView">
+            <header class="dashboard-toolbar panel">
+              <div class="dashboard-title-block">
+                <p class="kicker">Game Launcher</p>
+                <h1>Choose Your Training</h1>
+                <p class="dashboard-subtitle">Clean focus mode. Pick a module and start instantly.</p>
+              </div>
+
+              <div class="dashboard-toolbar-right">
+                <div class="session-pill-row">
+                  <article class="session-pill">
+                    <p>Today Sessions</p>
+                    <strong id="dashTodaySessions">0</strong>
+                  </article>
+                  <article class="session-pill">
+                    <p>All Sessions</p>
+                    <strong id="dashAllSessions">0</strong>
+                  </article>
+                  <article class="session-pill">
+                    <p>Today Play Time</p>
+                    <strong id="dashTodayPlayTime">0m</strong>
+                  </article>
+                </div>
+              </div>
+            </header>
+
+            <div class="dashboard-main-grid">
+              <article class="category-panel panel">
+                <div class="category-head">
+                  <div class="category-title">
+                    <span class="category-icon visual" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><use href="#icon-visual"></use></svg>
+                    </span>
+                    <div>
+                      <h2>Visual Color Tests</h2>
+                      <p>Reaction + color recall</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="launcher-grid">
+                  <button class="launcher-card launcher-warm" type="button" data-launch="colorMatch">
+                    <span class="launcher-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><use href="#icon-bolt"></use></svg>
+                    </span>
+                    <div class="launcher-copy">
+                      <h3>Color Match</h3>
+                      <p>Fast semantic-color decisions.</p>
+                    </div>
+                    <span class="launcher-cta">Play</span>
+                  </button>
+
+                  <button class="launcher-card launcher-cool" type="button" data-launch="colorMemory">
+                    <span class="launcher-icon" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><use href="#icon-memory"></use></svg>
+                    </span>
+                    <div class="launcher-copy">
+                      <h3>Color Memory</h3>
+                      <p>HSB precision memory drill.</p>
+                    </div>
+                    <span class="launcher-cta">Play</span>
+                  </button>
+                </div>
+              </article>
+
+              <article class="category-panel panel sound-panel">
+                <div class="category-title">
+                  <span class="category-icon sound" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><use href="#icon-sound"></use></svg>
+                  </span>
+                  <div>
+                    <h2>Sound Tests</h2>
+                    <p>Audio and rhythm categories</p>
+                  </div>
+                </div>
+
+                <div class="sound-tag-grid">
+                  <span>Pitch</span>
+                  <span>Sequence</span>
+                  <span>Rhythm</span>
+                  <span>Pattern</span>
+                </div>
+
+                <div class="sound-week-block">
+                  <div class="compact-head">
+                    <p class="kicker">Sound Week Activity</p>
+                    <p id="dashSoundWeekLabel">0/7 active days</p>
+                  </div>
+                  <div class="week-bars sound-week-bars" id="dashSoundWeekBars" aria-hidden="true"></div>
+                </div>
+
+                <button class="soft-btn" type="button" data-launch="colorMemory">Try Sample Drill</button>
+              </article>
+            </div>
+
+            <div class="dashboard-foot-grid">
+              <article class="compact-panel panel">
+                <div class="compact-head">
+                  <p class="kicker">Color Tests Activity</p>
+                  <p id="dashWeekActiveLabel">0/7 active days</p>
+                </div>
+                <div class="week-bars" id="dashWeekBars" aria-hidden="true"></div>
+              </article>
+
+              <article class="compact-panel panel">
+                <div class="history-head">
+                  <p class="kicker">Recent Sessions</p>
+                  <p id="dashboardHistoryWindow">Last 7 Sessions</p>
+                </div>
+                <ul class="history-list compact-history" id="dashboardHistoryList"></ul>
+              </article>
+            </div>
+          </section>
+
+          <section class="view" id="colorMatchView">
+            <header class="mode-header">
+              <button class="soft-btn small" type="button" data-back="dashboardView">Pause</button>
+              <p class="mode-label">BrainDash <strong>Color Match</strong></p>
+              <div class="mode-hud">
+                <span>Time <strong id="cmTime">60</strong></span>
+                <span>Score <strong id="cmScore">0</strong></span>
+                <div class="multiplier-box">
+                  <div class="streak-dots" id="cmStreakDots"></div>
+                  <strong id="cmMultiplier">x1</strong>
+                </div>
+              </div>
+            </header>
+
+            <section class="cm-stage panel">
+              <h2>Does the meaning match the text color?</h2>
+              <div class="accent-rule" aria-hidden="true"></div>
+
+              <div class="cm-cards">
+                <article class="word-card">
+                  <p class="word-caption">Meaning</p>
+                  <p class="word-value dark" id="cmLeftWord">yellow</p>
+                </article>
+
+                <article class="word-card">
+                  <p class="word-caption">Text Color</p>
+                  <p class="word-value" id="cmRightWord">blue</p>
+                </article>
+              </div>
+
+              <p class="cm-feedback" id="cmFeedback" aria-live="polite"></p>
+
+              <div class="cm-buttons">
+                <button class="soft-btn wide" id="cmNoBtn" type="button">No ←</button>
+                <button class="prime-btn wide" id="cmYesBtn" type="button">Yes →</button>
+              </div>
+
+              <p class="cm-hint">Keyboard: Left Arrow = No, Right Arrow = Yes</p>
+            </section>
+
+            <section class="cm-overlay panel" id="cmOverlay">
+              <p class="kicker" id="cmOverlayKicker">Ready Protocol</p>
+              <h3 id="cmOverlayTitle">Color Match</h3>
+              <p id="cmOverlayText">
+                Does the meaning of the left word match the color shown on the right?
+              </p>
+              <div class="overlay-actions">
+                <button class="prime-btn" id="cmOverlayAction" type="button">Start Game</button>
+                <button class="soft-btn" id="cmResetBtn" type="button">Reset</button>
+              </div>
+            </section>
+
+            <section class="cm-result-modal hidden" id="cmResultModal">
+              <article class="cm-result-card">
+                <p class="kicker">Session Complete</p>
+                <h3>Color Match Results</h3>
+                <p class="cm-result-score" id="cmResultScore">0</p>
+                <p class="cm-result-tagline" id="cmResultTagline">Sharp instincts. Keep the tempo.</p>
+
+                <div class="cm-result-metrics">
+                  <p>Accuracy <strong id="cmResultAccuracy">0%</strong></p>
+                  <p>Correct <strong id="cmResultCorrect">0/0</strong></p>
+                  <p>Wrong <strong id="cmResultWrong">0</strong></p>
+                  <p>Avg Response <strong id="cmResultAvgResponse">-</strong></p>
+                  <p>Peak Multiplier <strong id="cmResultPeak">x1</strong></p>
+                </div>
+
+                <div class="segmented-bars cm-result-bars" id="cmResultBars"></div>
+
+                <section class="result-top10">
+                  <div class="result-top10-head">
+                    <p class="kicker">Top 10 · Color Match</p>
+                    <p id="cmResultRank">Rank -</p>
+                  </div>
+                  <ol class="result-top10-list" id="cmResultTop10"></ol>
+                </section>
+
+                <div class="overlay-actions">
+                  <button class="prime-btn" id="cmResultPlayAgain" type="button">Play Again</button>
+                  <button class="soft-btn" id="cmResultBack" type="button">Back to Dashboard</button>
+                </div>
+              </article>
+            </section>
+          </section>
+
+          <section class="view" id="statsView">
+            <header class="stats-head">
+              <div>
+                <p class="kicker">Performance Analytics</p>
+                <h2>Training Progress</h2>
+              </div>
+              <button class="soft-btn small" id="statsRefreshBtn" type="button">Refresh</button>
+            </header>
+
+            <div class="stats-grid">
+              <article class="stats-summary panel">
+                <p class="kicker">Session Summary</p>
+                <div class="summary-metrics">
+                  <p>Total Sessions <strong id="statsTotalSessions">0</strong></p>
+                  <p>Total Play Time <strong id="statsTotalPlayTime">0m</strong></p>
+                  <p>Overall LPI <strong id="statsOverallLpi">0.0</strong></p>
+                  <p>Last Played <strong id="statsLastPlayed">-</strong></p>
+                </div>
+                <p class="lpi-coverage" id="statsLpiCoverage">0/6 domains active</p>
+
+                <div class="stats-domain-head">
+                  <p class="kicker">Core Brain Tracks</p>
+                  <p>Domain performance with progress bars.</p>
+                </div>
+                <div class="stats-domain-overview" id="statsDomainOverview"></div>
+              </article>
+
+              <article class="stats-top10 panel">
+                <div class="stats-top10-head">
+                  <p class="kicker">Top 10 By Game</p>
+                  <p>Compact summary with compare button.</p>
+                </div>
+                <div class="stats-top10-grid" id="statsTopByGame"></div>
+              </article>
+            </div>
+
+            <article class="stats-history panel">
+              <div class="stats-history-head">
+                <p class="kicker">Recent Sessions</p>
+                <p id="statsDbStatus">Connecting SQLite...</p>
+              </div>
+
+              <div class="stats-filter-row compact" id="statsGameTypeFilters">
+                <button class="stats-filter-btn active" type="button" data-game-filter="all">All Games</button>
+                <button class="stats-filter-btn" type="button" data-game-filter="color_match">Color Match</button>
+                <button class="stats-filter-btn" type="button" data-game-filter="color_memory">Color Memory</button>
+              </div>
+
+              <div class="filter-cluster" id="statsDomainFilters">
+                <button class="stats-filter-btn active" type="button" data-domain-filter="all">All Domains</button>
+                <button class="stats-filter-btn" type="button" data-domain-filter="speed">Speed</button>
+                <button class="stats-filter-btn" type="button" data-domain-filter="memory">Memory</button>
+                <button class="stats-filter-btn" type="button" data-domain-filter="attention">Attention</button>
+                <button class="stats-filter-btn" type="button" data-domain-filter="flexibility">Flexibility</button>
+                <button class="stats-filter-btn" type="button" data-domain-filter="problem_solving">Problem Solving</button>
+                <button class="stats-filter-btn" type="button" data-domain-filter="math">Math</button>
+              </div>
+
+              <div class="stats-empty" id="statsEmpty">No session history yet. Play a game to start building data.</div>
+              <div class="stats-list" id="statsList"></div>
+            </article>
+
+            <section class="stats-compare-modal hidden" id="statsCompareModal">
+              <article class="stats-compare-card">
+                <div class="stats-compare-head">
+                  <div>
+                    <p class="kicker">Compare With History</p>
+                    <h3 id="statsCompareTitle">Color Match</h3>
+                    <p id="statsCompareSummary">0 sessions · Best 0.00</p>
+                  </div>
+                  <button class="soft-btn small" id="statsCompareCloseBtn" type="button">Close</button>
+                </div>
+
+                <div class="stats-compare-grid">
+                  <section class="stats-compare-block">
+                    <p class="kicker">Top 10 Scores</p>
+                    <ol class="result-top10-list" id="statsCompareTop10"></ol>
+                  </section>
+
+                  <section class="stats-compare-block">
+                    <p class="kicker">Recent Sessions</p>
+                    <ul class="stats-compare-history" id="statsCompareHistory"></ul>
+                  </section>
+                </div>
+              </article>
+            </section>
+          </section>
+
+          <section class="view" id="colorMemoryView">
+            <header class="mode-header">
+              <button class="soft-btn small" type="button" data-back="dashboardView">Back</button>
+              <p class="mode-label">BrainDash <strong>Color Memory</strong></p>
+              <div class="mode-hud compact">
+                <span>Total <strong id="memTotalScoreHud">0.00</strong>/50</span>
+                <span>Round <strong id="memRoundHud">1/5</strong></span>
+              </div>
+            </header>
+
+            <section class="memory-session panel">
+              <div class="memory-top">
+                <div>
+                  <p class="kicker">Color Memory</p>
+                  <h2 id="memRoundTitle">Round 1/5</h2>
+                </div>
+                <div class="memory-top-actions">
+                  <div class="segmented-bars" id="memProgress"></div>
+                  <button class="soft-btn small" id="memStartBtn" type="button">Start Session</button>
+                </div>
+              </div>
+
+              <div class="memory-memorize" id="memMemorizePanel">
+                <h3>Memorize the Hue</h3>
+                <p class="phase-label">Phase 01: Retention</p>
+                <div class="target-color" id="memTargetSwatch"></div>
+                <p class="countdown" id="memCountdown">5.00</p>
+                <p class="countdown-caption">Seconds to remember</p>
+                <button class="soft-btn" id="memSkipBtn" type="button">Skip to Match</button>
+              </div>
+
+              <div class="memory-adjust hidden" id="memAdjustPanel">
+                <article class="slider-panel">
+                  <p class="kicker">Adjust HSB</p>
+                  <div class="slider-columns">
+                    <div class="slider-axis">
+                      <p>Hue</p>
+                      <div class="slider-input-shell hue-track">
+                        <input id="memHueSlider" class="slider-range" type="range" min="0" max="360" value="180" aria-label="Hue slider" />
+                      </div>
+                      <span id="memHueValue">180</span>
+                    </div>
+
+                    <div class="slider-axis">
+                      <p>Sat</p>
+                      <div class="slider-input-shell sat-track">
+                        <input id="memSatSlider" class="slider-range" type="range" min="0" max="100" value="50" aria-label="Saturation slider" />
+                      </div>
+                      <span id="memSatValue">50</span>
+                    </div>
+
+                    <div class="slider-axis">
+                      <p>Val</p>
+                      <div class="slider-input-shell bri-track">
+                        <input id="memBriSlider" class="slider-range" type="range" min="0" max="100" value="50" aria-label="Brightness slider" />
+                      </div>
+                      <span id="memBriValue">50</span>
+                    </div>
+                  </div>
+
+                  <div class="adjust-meta">
+                    <p>Average Error <strong id="memAverageErrorInline">0.0%</strong></p>
+                    <p>Speed Bonus <strong id="memSpeedInline">+0 XP</strong></p>
+                  </div>
+                </article>
+
+                <article class="preview-panel">
+                  <p class="hex-pill">Current HEX <strong id="memCurrentHex">#556B2F</strong></p>
+                  <div class="preview-color" id="memPreview"></div>
+                  <button class="prime-btn" id="memConfirmBtn" type="button">Confirm Selection</button>
+                  <p class="preview-hint">Adjust sliders to match the memorized shade.</p>
+                </article>
+              </div>
+
+              <section class="memory-result-modal hidden" id="memResultModal">
+                <div class="memory-result" id="memResultCard">
+                  <article class="dialed-card" id="memDialedCard">
+                    <section class="dialed-half dialed-guess" id="memDialedGuess">
+                      <p class="dialed-step" id="memDialedStep">1/5</p>
+
+                      <div class="dialed-selection">
+                        <p>Your selection</p>
+                        <strong id="memGuessHsb">H180 S50 B50</strong>
+                      </div>
+
+                      <div class="dialed-score-block">
+                        <p class="dialed-score-value" id="memRoundScoreValue">0.00</p>
+                        <p class="dialed-score-caption" id="memRoundCaption">Calibrating confidence.</p>
+                      </div>
+                    </section>
+
+                    <section class="dialed-half dialed-original" id="memDialedOriginal">
+                      <div class="dialed-selection">
+                        <p>Original</p>
+                        <strong id="memTargetHsb">H180 S50 B50</strong>
+                      </div>
+
+                      <button class="dialed-next" id="memNextBtn" type="button" aria-label="Next memory round">
+                        →
+                      </button>
+                    </section>
+                  </article>
+
+                  <section class="memory-summary-screen hidden" id="memSummaryScreen">
+                    <section class="result-top10 hidden" id="memResultTop10Section">
+                      <div class="result-top10-head">
+                        <p class="kicker">Top 10 · Color Memory</p>
+                        <p id="memResultRank">Rank -</p>
+                      </div>
+                      <ol class="result-top10-list" id="memResultTop10"></ol>
+                    </section>
+
+                    <p class="memory-result-note">HSB weighted scoring: Hue 5, Saturation 3, Brightness 2.</p>
+
+                    <section class="memory-round-summary">
+                      <div class="memory-round-summary-head">
+                        <p class="kicker">Round Color Summary</p>
+                        <p id="memRoundSummaryMeta">0 / 5 recorded</p>
+                      </div>
+                      <div class="memory-round-log" id="memRoundLog"></div>
+                    </section>
+
+                    <div class="breakdown-list">
+                      <article class="break-row">
+                        <div>
+                          <p class="break-label">Hue</p>
+                          <p class="break-meta" id="memHueMeta">Δ 0°</p>
+                        </div>
+                        <div class="track"><span class="fill hue" id="memHueFill"></span></div>
+                        <p class="break-score" id="memHueScore">0.00/5</p>
+                      </article>
+
+                      <article class="break-row">
+                        <div>
+                          <p class="break-label">Saturation</p>
+                          <p class="break-meta" id="memSatMeta">Δ 0</p>
+                        </div>
+                        <div class="track"><span class="fill sat" id="memSatFill"></span></div>
+                        <p class="break-score" id="memSatScore">0.00/3</p>
+                      </article>
+
+                      <article class="break-row">
+                        <div>
+                          <p class="break-label">Brightness</p>
+                          <p class="break-meta" id="memBriMeta">Δ 0</p>
+                        </div>
+                        <div class="track"><span class="fill bri" id="memBriFill"></span></div>
+                        <p class="break-score" id="memBriScore">0.00/2</p>
+                      </article>
+                    </div>
+
+                    <div class="result-summary">
+                      <p>Session Total <strong id="memTotalScore">0.00 / 50</strong></p>
+                      <p>Average Error <strong id="memAverageError">0.0%</strong></p>
+                      <p>Speed Bonus <strong id="memSpeedBonus">+0 XP</strong></p>
+                    </div>
+
+                    <div class="overlay-actions">
+                      <button class="prime-btn" id="memSummaryPlayAgain" type="button">Play Again</button>
+                      <button class="soft-btn" id="memSummaryBack" type="button">Back to Dashboard</button>
+                    </div>
+                  </section>
+                  </div>
+                </div>
+              </section>
+            </section>
+          </section>
+
+          <section class="view" id="settingsView">
+            <article class="settings-card panel">
+              <p class="kicker">Settings</p>
+              <h2>Session Controls</h2>
+              <p>
+                Use Dashboard to launch drills. Stats mode includes full HSB weighted scoring with formula parity
+                from the technical readme.
+              </p>
+              <div class="settings-list">
+                <p>Arrow Left / Right controls are enabled in Color Match.</p>
+                <p>Color Memory runs 5 rounds with maximum 50 points.</p>
+                <p>Top status score aggregates points from all active drills.</p>
+              </div>
+            </article>
+          </section>
+        </main>
+      </section>
+    </div>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
