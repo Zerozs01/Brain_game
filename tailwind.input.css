@@ -3,8 +3,17 @@
 @source "./index.html";
 
 @theme {
-  --color-brand-primary: #f88547;
-  --color-brand-secondary: #bfe7ef;
-  --color-brand-tertiary: #f9ab3e;
-  --color-brand-surface: #111317;
+  /* Main Colors */
+  --color-notion-bg: #191919;
+  --color-notion-text: #D4D4D4;
+  --color-notion-border: #2E2E2E;
+  --color-notion-muted: #787774;
+
+  /* Dark Mode Callout Backgrounds */
+  --color-notion-green: #2B3A31;   /* Brain / Skill */
+  --color-notion-purple: #3C2D43;  /* Work */
+  --color-notion-blue: #273646;    /* Energy */
+  --color-notion-brown: #43351C;   /* Setting */
+  
+  --font-notion: "Inter", "Plus Jakarta Sans", "ui-sans-serif", "system-ui", -apple-system, sans-serif;
 }

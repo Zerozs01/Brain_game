@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,13 +7,13 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="tailwind.generated.css" />
     <link rel="stylesheet" href="styles.css" />
   </head>
-  <body>
+  <body class="bg-notion-bg text-notion-text font-notion h-full antialiased selection:bg-notion-purple">
     <svg class="icon-sprite" aria-hidden="true" focusable="false">
       <symbol id="icon-grid" viewBox="0 0 24 24">
         <rect x="3" y="3" width="7" height="7" rx="1.2" />
@@ -62,520 +62,568 @@
       </symbol>
     </svg>
 
-    <div class="app-layout">
-      <aside class="sidebar glass">
-        <div class="brand">
-          <p class="brand-title">BrainDash</p>
-          <p class="brand-sub">Luminous Mind</p>
+    <div class="app-layout max-w-6xl mx-auto px-6 py-12 flex flex-col md:grid md:grid-cols-[240px_1fr] gap-8">
+      <aside class="sidebar bg-[#202020] rounded-lg border border-[#333333] p-5 flex flex-col gap-6 self-start shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+        <div class="brand flex flex-col gap-1 border-b border-[#333333] pb-4">
+          <p class="brand-title text-xl font-bold tracking-tight text-notion-text flex items-center gap-2">
+            <span>🧠</span> BrainDash
+          </p>
+          <p class="brand-sub text-[10px] font-semibold tracking-wider text-notion-muted uppercase">
+            Notion State
+          </p>
         </div>
 
-        <nav class="sidebar-nav" aria-label="Main Navigation">
-          <button class="nav-btn active" type="button" data-view="dashboardView">
-            <span class="nav-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><use href="#icon-grid"></use></svg>
+        <nav class="sidebar-nav flex flex-col gap-1" aria-label="Main Navigation">
+          <button class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-md bg-transparent text-notion-text hover:bg-[#2F2F2F] transition-colors cursor-pointer text-left text-sm font-medium active" type="button" data-view="dashboardView">
+            <span class="nav-icon w-4 h-4 text-notion-muted" aria-hidden="true">
+              <svg class="w-full h-full" viewBox="0 0 24 24"><use href="#icon-grid"></use></svg>
             </span>
             <span>Dashboard</span>
           </button>
-          <button class="nav-btn" type="button" data-view="statsView">
-            <span class="nav-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><use href="#icon-chart"></use></svg>
+          <button class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-md bg-transparent text-notion-text hover:bg-[#2F2F2F] transition-colors cursor-pointer text-left text-sm font-medium" type="button" data-view="statsView">
+            <span class="nav-icon w-4 h-4 text-notion-muted" aria-hidden="true">
+              <svg class="w-full h-full" viewBox="0 0 24 24"><use href="#icon-chart"></use></svg>
             </span>
             <span>Stats</span>
           </button>
-          <button class="nav-btn" type="button" data-view="settingsView">
-            <span class="nav-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24"><use href="#icon-cog"></use></svg>
+          <button class="nav-btn w-full flex items-center gap-3 px-3 py-2 rounded-md bg-transparent text-notion-text hover:bg-[#2F2F2F] transition-colors cursor-pointer text-left text-sm font-medium" type="button" data-view="settingsView">
+            <span class="nav-icon w-4 h-4 text-notion-muted" aria-hidden="true">
+              <svg class="w-full h-full" viewBox="0 0 24 24"><use href="#icon-cog"></use></svg>
             </span>
             <span>Settings</span>
           </button>
         </nav>
       </aside>
 
-      <section class="main-shell" id="mainShell">
-        <header class="top-status glass home-hidden" id="topStatusBar">
-          <div class="status-line">
-            <span class="status-key">Status</span>
-            <span>Time: <strong id="topTime">02:45</strong></span>
-            <span>Current <strong class="score-highlight" id="topScore">12,400</strong></span>
+      <section class="main-shell flex flex-col gap-6" id="mainShell">
+        <header class="top-status bg-notion-bg rounded-lg border border-notion-border px-5 py-3 flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)] home-hidden" id="topStatusBar">
+          <div class="status-line flex items-center gap-4 text-xs text-notion-muted">
+            <span class="px-2 py-0.5 bg-notion-bg rounded font-medium text-notion-text">Active</span>
+            <span>⏱️ Time: <strong id="topTime" class="text-notion-text font-semibold">02:45</strong></span>
+            <span>🎯 Score: <strong class="text-[#C04D4D] font-bold" id="topScore">12,400</strong></span>
           </div>
-          <div class="status-right">
-            <div class="dot-pack" aria-hidden="true">
-              <span></span>
-              <span></span>
-              <span></span>
+          <div class="status-right flex items-center gap-3">
+            <div class="dot-pack flex gap-1" aria-hidden="true">
+              <span class="w-1.5 h-1.5 bg-notion-green rounded-full"></span>
+              <span class="w-1.5 h-1.5 bg-notion-blue rounded-full"></span>
+              <span class="w-1.5 h-1.5 bg-notion-purple rounded-full"></span>
             </div>
-            <p id="playerLabel">PLAYER_01</p>
+            <p id="playerLabel" class="text-xs font-semibold text-notion-text bg-notion-bg px-2 py-1 rounded">PLAYER_01</p>
           </div>
         </header>
 
         <main class="view-stack">
-          <section class="view active" id="dashboardView">
-            <header class="dashboard-toolbar panel">
-              <div class="dashboard-title-block">
-                <p class="kicker">Game Launcher</p>
-                <h1>Choose Your Training</h1>
-                <p class="dashboard-subtitle">Clean focus mode. Pick a module and start instantly.</p>
+          <!-- 💻 VIEW: DASHBOARD -->
+          <section class="view flex flex-col gap-6 active" id="dashboardView">
+            <header class="dashboard-toolbar bg-notion-bg rounded-lg border border-notion-border p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+              <div class="dashboard-title-block flex flex-col gap-2">
+                <p class="kicker text-[10px] font-bold tracking-wider text-notion-muted uppercase flex items-center gap-1.5">
+                  <span>🚀</span> Game Launcher
+                </p>
+                <h1 class="text-3xl font-extrabold text-white tracking-tight">Choose Your Training</h1>
+                <p class="dashboard-subtitle text-sm text-notion-muted">Clean focus mode. Pick a module and start instantly.</p>
               </div>
 
               <div class="dashboard-toolbar-right">
-                <div class="session-pill-row">
-                  <article class="session-pill">
-                    <p>Today Sessions</p>
-                    <strong id="dashTodaySessions">0</strong>
+                <div class="session-pill-row flex gap-3">
+                  <article class="session-pill bg-white/5 border border-[#3E3E3E] rounded-md px-4 py-2 text-center min-w-[100px]">
+                    <p class="text-[9px] font-bold text-notion-muted uppercase tracking-wider">Today</p>
+                    <strong id="dashTodaySessions" class="text-lg font-bold text-notion-text">0</strong>
                   </article>
-                  <article class="session-pill">
-                    <p>All Sessions</p>
-                    <strong id="dashAllSessions">0</strong>
+                  <article class="session-pill bg-white/5 border border-[#3E3E3E] rounded-md px-4 py-2 text-center min-w-[100px]">
+                    <p class="text-[9px] font-bold text-notion-muted uppercase tracking-wider">Total</p>
+                    <strong id="dashAllSessions" class="text-lg font-bold text-notion-text">0</strong>
                   </article>
-                  <article class="session-pill">
-                    <p>Today Play Time</p>
-                    <strong id="dashTodayPlayTime">0m</strong>
+                  <article class="session-pill bg-[#2A2A2A] border border-[#3E3E3E] rounded-md px-4 py-2 text-center min-w-[100px]">
+                    <p class="text-[9px] font-bold text-notion-muted uppercase tracking-wider">Playtime</p>
+                    <strong id="dashTodayPlayTime" class="text-lg font-bold text-notion-text">0m</strong>
                   </article>
                 </div>
               </div>
             </header>
 
-            <div class="dashboard-main-grid">
-              <article class="category-panel panel">
-                <div class="category-head">
-                  <div class="category-title">
-                    <span class="category-icon visual" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><use href="#icon-visual"></use></svg>
+            <div class="dashboard-main-grid flex flex-col lg:grid lg:grid-cols-[1fr_320px] gap-6">
+              <!-- Left Column: Games -->
+              <div class="flex flex-col gap-6">
+                <!-- Visual Color Tests Section (Callout Yellow Background) -->
+                <article class="category-panel bg-notion-green rounded-lg border border-notion-border p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                  <div class="category-head flex items-center gap-3">
+                    <span class="category-icon visual w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-[#448361]" aria-hidden="true">
+                      <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#icon-visual"></use></svg>
                     </span>
                     <div>
-                      <h2>Visual Color Tests</h2>
-                      <p>Reaction + color recall</p>
+                      <h2 class="text-base font-bold text-white">Visual Color Tests</h2>
+                      <p class="text-xs text-[#E0E0E0]/80">Reaction + color recall drills</p>
                     </div>
                   </div>
-                </div>
 
-                <div class="launcher-grid">
-                  <button class="launcher-card launcher-warm" type="button" data-launch="colorMatch">
-                    <span class="launcher-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><use href="#icon-bolt"></use></svg>
-                    </span>
-                    <div class="launcher-copy">
-                      <h3>Color Match</h3>
-                      <p>Fast semantic-color decisions.</p>
-                    </div>
-                    <span class="launcher-cta">Play</span>
-                  </button>
+                  <div class="launcher-grid flex flex-col gap-2">
+                    <!-- Color Match Button -->
+                    <button class="launcher-card w-full flex items-center justify-between p-3.5 rounded-md bg-[#2F2F2F] border border-[#3E3E3E] hover:bg-[#3A3A3A] transition-colors cursor-pointer text-left shadow-[0_1px_2px_rgba(0,0,0,0.01)]" type="button" data-launch="colorMatch">
+                      <div class="flex items-center gap-3.5">
+                        <span class="launcher-icon w-8 h-8 rounded bg-notion-purple flex items-center justify-center text-[#C04D4D]" aria-hidden="true">
+                          <svg class="w-4 h-4" viewBox="0 0 24 24"><use href="#icon-bolt"></use></svg>
+                        </span>
+                        <div class="launcher-copy">
+                          <h3 class="text-sm font-semibold text-notion-text">Color Match</h3>
+                          <p class="text-xs text-notion-muted">Fast semantic-color decisions.</p>
+                        </div>
+                      </div>
+                      <span class="launcher-cta text-xs font-semibold text-notion-muted">Play →</span>
+                    </button>
 
-                  <button class="launcher-card launcher-cool" type="button" data-launch="colorMemory">
-                    <span class="launcher-icon" aria-hidden="true">
-                      <svg viewBox="0 0 24 24"><use href="#icon-memory"></use></svg>
-                    </span>
-                    <div class="launcher-copy">
-                      <h3>Color Memory</h3>
-                      <p>HSB precision memory drill.</p>
-                    </div>
-                    <span class="launcher-cta">Play</span>
-                  </button>
-                </div>
-              </article>
+                    <!-- Color Memory Button -->
+                    <button class="launcher-card w-full flex items-center justify-between p-3.5 rounded-md bg-[#2F2F2F] border border-[#3E3E3E] hover:bg-[#3A3A3A] transition-colors cursor-pointer text-left shadow-[0_1px_2px_rgba(0,0,0,0.01)]" type="button" data-launch="colorMemory">
+                      <div class="flex items-center gap-3.5">
+                        <span class="launcher-icon w-8 h-8 rounded bg-notion-blue flex items-center justify-center text-[#2F6C8F]" aria-hidden="true">
+                          <svg class="w-4 h-4" viewBox="0 0 24 24"><use href="#icon-memory"></use></svg>
+                        </span>
+                        <div class="launcher-copy">
+                          <h3 class="text-sm font-semibold text-notion-text">Color Memory</h3>
+                          <p class="text-xs text-notion-muted">HSB precision memory drill.</p>
+                        </div>
+                      </div>
+                      <span class="launcher-cta text-xs font-semibold text-notion-muted">Play →</span>
+                    </button>
+                  </div>
+                </article>
+              </div>
 
-              <article class="category-panel panel sound-panel">
-                <div class="category-title">
-                  <span class="category-icon sound" aria-hidden="true">
-                    <svg viewBox="0 0 24 24"><use href="#icon-sound"></use></svg>
+              <!-- Right Column: Sound Panel -->
+              <article class="category-panel bg-notion-blue rounded-lg border border-notion-border p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                <div class="category-title flex items-center gap-3 pb-2 border-b border-notion-border">
+                  <span class="category-icon sound w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-[#2F6C8F]" aria-hidden="true">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#icon-sound"></use></svg>
                   </span>
                   <div>
-                    <h2>Sound Tests</h2>
-                    <p>Audio and rhythm categories</p>
+                    <h2 class="text-sm font-bold text-white">Sound Tests</h2>
+                    <p class="text-[11px] text-[#E0E0E0]/80">Audio and rhythm tracks</p>
                   </div>
                 </div>
 
-                <div class="sound-tag-grid">
-                  <span>Pitch</span>
-                  <span>Sequence</span>
-                  <span>Rhythm</span>
-                  <span>Pattern</span>
+                <div class="sound-tag-grid flex flex-wrap gap-1.5">
+                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pitch</span>
+                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Sequence</span>
+                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Rhythm</span>
+                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pattern</span>
                 </div>
 
-                <div class="sound-week-block">
-                  <div class="compact-head">
-                    <p class="kicker">Sound Week Activity</p>
-                    <p id="dashSoundWeekLabel">0/7 active days</p>
+                <div class="sound-week-block bg-[#2F2F2F] rounded border border-[#3E3E3E] p-3 flex flex-col gap-2">
+                  <div class="compact-head flex items-center justify-between text-xs">
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Activity</p>
+                    <p id="dashSoundWeekLabel" class="text-[10px] font-semibold text-notion-text">0/7 active days</p>
                   </div>
-                  <div class="week-bars sound-week-bars" id="dashSoundWeekBars" aria-hidden="true"></div>
+                  <div class="week-bars sound-week-bars flex justify-between h-8 items-end gap-1" id="dashSoundWeekBars" aria-hidden="true"></div>
                 </div>
 
-                <button class="soft-btn" type="button" data-launch="colorMemory">Try Sample Drill</button>
+                <button class="soft-btn w-full py-2 bg-[#2F2F2F] hover:bg-[#3A3A3A] text-xs font-semibold text-notion-text border border-notion-border rounded transition-colors cursor-pointer" type="button" data-launch="colorMemory">Try Sample Drill</button>
               </article>
             </div>
 
-            <div class="dashboard-foot-grid">
-              <article class="compact-panel panel">
-                <div class="compact-head">
-                  <p class="kicker">Color Tests Activity</p>
-                  <p id="dashWeekActiveLabel">0/7 active days</p>
+            <!-- Dashboard Foot: Stats Summary and History -->
+            <div class="dashboard-foot-grid flex flex-col md:grid md:grid-cols-[240px_1fr] gap-6">
+              <!-- Color Test Activity Box -->
+              <article class="compact-panel bg-[#2A2A2A] rounded-lg border border-[#3E3E3E] p-4 flex flex-col gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                <div class="compact-head flex justify-between items-center text-xs">
+                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Streak</p>
+                  <p id="dashWeekActiveLabel" class="text-[10px] font-semibold text-notion-text">0/7 active days</p>
                 </div>
-                <div class="week-bars" id="dashWeekBars" aria-hidden="true"></div>
+                <div class="week-bars flex justify-between h-8 items-end gap-1" id="dashWeekBars" aria-hidden="true"></div>
               </article>
 
-              <article class="compact-panel panel">
-                <div class="history-head">
-                  <p class="kicker">Recent Sessions</p>
-                  <p id="dashboardHistoryWindow">Last 7 Sessions</p>
+              <!-- Recent Sessions Box -->
+              <article class="compact-panel bg-[#2A2A2A] rounded-lg border border-[#3E3E3E] p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                <div class="history-head flex justify-between items-center pb-2 border-b border-notion-border">
+                  <p class="kicker text-[10px] font-bold text-notion-muted uppercase tracking-wider">Recent Sessions</p>
+                  <p id="dashboardHistoryWindow" class="text-xs text-notion-muted font-medium">Last 7 Sessions</p>
                 </div>
-                <ul class="history-list compact-history" id="dashboardHistoryList"></ul>
+                <ul class="history-list flex flex-col gap-2" id="dashboardHistoryList"></ul>
               </article>
             </div>
           </section>
 
-          <section class="view" id="colorMatchView">
-            <header class="mode-header">
-              <button class="soft-btn small" type="button" data-back="dashboardView">Pause</button>
-              <p class="mode-label">BrainDash <strong>Color Match</strong></p>
-              <div class="mode-hud">
-                <span>Time <strong id="cmTime">60</strong></span>
-                <span>Score <strong id="cmScore">0</strong></span>
-                <div class="multiplier-box">
-                  <div class="streak-dots" id="cmStreakDots"></div>
-                  <strong id="cmMultiplier">x1</strong>
+          <!-- 🕹️ VIEW: COLOR MATCH -->
+          <section class="view flex flex-col gap-6" id="colorMatchView">
+            <header class="mode-header flex items-center justify-between pb-3 border-b border-notion-border">
+              <button class="soft-btn px-3 py-1.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold text-notion-text rounded cursor-pointer transition-colors" type="button" data-back="dashboardView">Pause</button>
+              <p class="mode-label text-sm text-notion-muted">BrainDash <strong class="text-notion-text">Color Match</strong></p>
+              <div class="mode-hud flex items-center gap-4 text-xs font-medium text-notion-muted">
+                <span>⏱️ <strong id="cmTime" class="text-notion-text">60</strong>s</span>
+                <span>🎯 <strong id="cmScore" class="text-notion-text">0</strong></span>
+                <div class="multiplier-box bg-notion-bg border border-notion-border px-2 py-0.5 rounded flex items-center gap-2">
+                  <div class="streak-dots flex gap-1" id="cmStreakDots"></div>
+                  <strong id="cmMultiplier" class="text-xs text-notion-text">x1</strong>
                 </div>
               </div>
             </header>
 
-            <section class="cm-stage panel">
-              <h2>Does the meaning match the text color?</h2>
-              <div class="accent-rule" aria-hidden="true"></div>
+            <section class="cm-stage bg-notion-bg rounded-lg border border-notion-border p-8 flex flex-col items-center gap-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+              <h2 class="text-xl font-bold text-notion-text">Does the meaning match the text color?</h2>
+              <div class="accent-rule w-12 h-1 bg-notion-bg rounded-full" aria-hidden="true"></div>
 
-              <div class="cm-cards">
-                <article class="word-card">
-                  <p class="word-caption">Meaning</p>
-                  <p class="word-value dark" id="cmLeftWord">yellow</p>
+              <div class="cm-cards w-full grid grid-cols-2 gap-4">
+                <article class="word-card bg-notion-bg border border-notion-border rounded-lg p-6 flex flex-col items-center justify-center gap-2">
+                  <p class="word-caption text-[10px] font-bold text-notion-muted tracking-wider uppercase">Meaning</p>
+                  <p class="word-value text-4xl font-extrabold" id="cmLeftWord">yellow</p>
                 </article>
 
-                <article class="word-card">
-                  <p class="word-caption">Text Color</p>
-                  <p class="word-value" id="cmRightWord">blue</p>
+                <article class="word-card bg-notion-bg border border-notion-border rounded-lg p-6 flex flex-col items-center justify-center gap-2">
+                  <p class="word-caption text-[10px] font-bold text-notion-muted tracking-wider uppercase">Text Color</p>
+                  <p class="word-value text-4xl font-extrabold" id="cmRightWord">blue</p>
                 </article>
               </div>
 
-              <p class="cm-feedback" id="cmFeedback" aria-live="polite"></p>
+              <p class="cm-feedback h-6 text-sm font-bold flex items-center justify-center" id="cmFeedback" aria-live="polite"></p>
 
-              <div class="cm-buttons">
-                <button class="soft-btn wide" id="cmNoBtn" type="button">No ←</button>
-                <button class="prime-btn wide" id="cmYesBtn" type="button">Yes →</button>
+              <div class="cm-buttons flex gap-3">
+                <button class="soft-btn px-6 py-2.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-sm font-semibold rounded cursor-pointer transition-colors" id="cmNoBtn" type="button">No ←</button>
+                <button class="prime-btn px-6 py-2.5 bg-[#37352F] text-white border border-[#37352F] hover:bg-[#1f1e1b] text-sm font-semibold rounded cursor-pointer transition-colors" id="cmYesBtn" type="button">Yes →</button>
               </div>
 
-              <p class="cm-hint">Keyboard: Left Arrow = No, Right Arrow = Yes</p>
+              <p class="cm-hint text-xs text-notion-muted font-medium">Keyboard: Left Arrow = No, Right Arrow = Yes</p>
             </section>
 
-            <section class="cm-overlay panel" id="cmOverlay">
-              <p class="kicker" id="cmOverlayKicker">Ready Protocol</p>
-              <h3 id="cmOverlayTitle">Color Match</h3>
-              <p id="cmOverlayText">
+            <!-- Game Overlay Modal (Callout Style) -->
+            <section class="cm-overlay bg-notion-bg rounded-lg border border-notion-border p-6 text-center max-w-[480px] mx-auto shadow-[0_4px_12px_rgba(0,0,0,0.05)]" id="cmOverlay">
+              <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider" id="cmOverlayKicker">Ready Protocol</p>
+              <h3 class="text-lg font-bold text-notion-text" id="cmOverlayTitle">Color Match</h3>
+              <p class="text-xs text-notion-muted leading-relaxed my-2" id="cmOverlayText">
                 Does the meaning of the left word match the color shown on the right?
               </p>
-              <div class="overlay-actions">
-                <button class="prime-btn" id="cmOverlayAction" type="button">Start Game</button>
-                <button class="soft-btn" id="cmResetBtn" type="button">Reset</button>
+              <div class="overlay-actions flex justify-center gap-3">
+                <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="cmOverlayAction" type="button">Start Game</button>
+                <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="cmResetBtn" type="button">Reset</button>
               </div>
             </section>
 
+            <!-- Results Screen (Light Overlay) -->
             <section class="cm-result-modal hidden" id="cmResultModal">
-              <article class="cm-result-card">
-                <p class="kicker">Session Complete</p>
-                <h3>Color Match Results</h3>
-                <p class="cm-result-score" id="cmResultScore">0</p>
-                <p class="cm-result-tagline" id="cmResultTagline">Sharp instincts. Keep the tempo.</p>
+              <article class="cm-result-card bg-notion-bg rounded-lg border border-notion-border p-6 max-w-[480px] w-full text-center flex flex-col gap-4 shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
+                <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Session Complete</p>
+                <h3 class="text-xl font-bold text-notion-text">Color Match Results</h3>
+                <p class="cm-result-score text-5xl font-extrabold text-[#C04D4D]" id="cmResultScore">0</p>
+                <p class="cm-result-tagline text-xs text-notion-muted" id="cmResultTagline">Sharp instincts. Keep the tempo.</p>
 
-                <div class="cm-result-metrics">
-                  <p>Accuracy <strong id="cmResultAccuracy">0%</strong></p>
-                  <p>Correct <strong id="cmResultCorrect">0/0</strong></p>
-                  <p>Wrong <strong id="cmResultWrong">0</strong></p>
-                  <p>Avg Response <strong id="cmResultAvgResponse">-</strong></p>
-                  <p>Peak Multiplier <strong id="cmResultPeak">x1</strong></p>
+                <div class="cm-result-metrics flex flex-wrap justify-center gap-2">
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs">Accuracy <strong id="cmResultAccuracy">0%</strong></p>
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs">Correct <strong id="cmResultCorrect">0/0</strong></p>
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs">Wrong <strong id="cmResultWrong">0</strong></p>
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs">Avg Response <strong id="cmResultAvgResponse">-</strong></p>
+                  <p class="px-2.5 py-1 bg-notion-purple border border-notion-border rounded-full text-xs">Peak Multiplier <strong id="cmResultPeak">x1</strong></p>
                 </div>
 
-                <div class="segmented-bars cm-result-bars" id="cmResultBars"></div>
+                <div class="segmented-bars cm-result-bars flex justify-center gap-1.5" id="cmResultBars"></div>
 
-                <section class="result-top10">
-                  <div class="result-top10-head">
-                    <p class="kicker">Top 10 · Color Match</p>
-                    <p id="cmResultRank">Rank -</p>
+                <section class="result-top10 bg-notion-bg border border-notion-border rounded p-4 flex flex-col gap-2">
+                  <div class="result-top10-head flex justify-between items-center text-xs">
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Top 10 · Color Match</p>
+                    <p id="cmResultRank" class="font-semibold text-notion-text">Rank -</p>
                   </div>
-                  <ol class="result-top10-list" id="cmResultTop10"></ol>
+                  <ol class="result-top10-list flex flex-col gap-1.5" id="cmResultTop10"></ol>
                 </section>
 
-                <div class="overlay-actions">
-                  <button class="prime-btn" id="cmResultPlayAgain" type="button">Play Again</button>
-                  <button class="soft-btn" id="cmResultBack" type="button">Back to Dashboard</button>
+                <div class="overlay-actions flex justify-center gap-3 border-t border-notion-border pt-4">
+                  <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="cmResultPlayAgain" type="button">Play Again</button>
+                  <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="cmResultBack" type="button">Back to Dashboard</button>
                 </div>
               </article>
             </section>
           </section>
 
-          <section class="view" id="statsView">
-            <header class="stats-head">
+          <!-- 📊 VIEW: STATS -->
+          <section class="view flex flex-col gap-6" id="statsView">
+            <header class="stats-head flex items-center justify-between pb-3 border-b border-notion-border">
               <div>
-                <p class="kicker">Performance Analytics</p>
-                <h2>Training Progress</h2>
+                <p class="kicker text-[10px] font-bold tracking-wider text-notion-muted uppercase">Performance Analytics</p>
+                <h2 class="text-xl font-bold text-notion-text">Training Progress</h2>
               </div>
-              <button class="soft-btn small" id="statsRefreshBtn" type="button">Refresh</button>
+              <button class="soft-btn px-3 py-1.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold text-notion-text rounded cursor-pointer transition-colors" id="statsRefreshBtn" type="button">Refresh</button>
             </header>
 
-            <div class="stats-grid">
-              <article class="stats-summary panel">
-                <p class="kicker">Session Summary</p>
-                <div class="summary-metrics">
-                  <p>Total Sessions <strong id="statsTotalSessions">0</strong></p>
-                  <p>Total Play Time <strong id="statsTotalPlayTime">0m</strong></p>
-                  <p>Overall LPI <strong id="statsOverallLpi">0.0</strong></p>
-                  <p>Last Played <strong id="statsLastPlayed">-</strong></p>
-                </div>
-                <p class="lpi-coverage" id="statsLpiCoverage">0/6 domains active</p>
+            <div class="stats-grid grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- Left Column: Summary and Domain Progress Stack -->
+              <div class="flex flex-col gap-6">
+                <!-- SESSION SUMMARY (Purple Card) -->
+                <article class="stats-summary bg-notion-purple border border-[#4A3B52] rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Session Summary</p>
+                  <div class="summary-metrics grid grid-cols-2 gap-3">
+                    <p class="bg-[#191919]/50 border border-notion-border rounded p-3 text-xs text-gray-400">Total Sessions <strong id="statsTotalSessions" class="block text-lg font-bold text-white mt-1">0</strong></p>
+                    <p class="bg-[#191919]/50 border border-notion-border rounded p-3 text-xs text-gray-400">Total Play Time <strong id="statsTotalPlayTime" class="block text-lg font-bold text-white mt-1">0m</strong></p>
+                    <p class="bg-[#191919]/50 border border-notion-border rounded p-3 text-xs text-gray-400">Overall LPI <strong id="statsOverallLpi" class="block text-lg font-bold text-white mt-1">0.0</strong></p>
+                    <p class="bg-[#191919]/50 border border-notion-border rounded p-3 text-xs text-gray-400">Last Played <strong id="statsLastPlayed" class="block text-sm font-semibold text-white mt-2">-</strong></p>
+                  </div>
+                  <p class="lpi-coverage text-xs text-notion-muted font-medium" id="statsLpiCoverage">0/6 domains active</p>
+                </article>
 
-                <div class="stats-domain-head">
-                  <p class="kicker">Core Brain Tracks</p>
-                  <p>Domain performance with progress bars.</p>
-                </div>
-                <div class="stats-domain-overview" id="statsDomainOverview"></div>
-              </article>
+                <!-- CORE BRAIN TRACKS (Blue Card) -->
+                <article class="stats-domain bg-notion-blue border border-[#344659] rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                  <div class="stats-domain-head flex flex-col gap-1">
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Core Brain Tracks</p>
+                    <p class="text-xs text-notion-muted">Domain performance and progress</p>
+                  </div>
+                  <div class="stats-domain-overview grid grid-cols-2 gap-3" id="statsDomainOverview"></div>
+                </article>
+              </div>
 
-              <article class="stats-top10 panel">
+              <!-- Right Column: Top 10 By Game (Green Card) -->
+              <article class="stats-top10 bg-notion-green border border-[#35483a] rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                 <div class="stats-top10-head">
-                  <p class="kicker">Top 10 By Game</p>
-                  <p>Compact summary with compare button.</p>
+                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Top 10 By Game</p>
+                  <p class="text-xs text-notion-muted">Compact summary with compare tool</p>
                 </div>
-                <div class="stats-top10-grid" id="statsTopByGame"></div>
+                <div class="stats-top10-grid flex flex-col gap-3" id="statsTopByGame"></div>
               </article>
             </div>
 
-            <article class="stats-history panel">
-              <div class="stats-history-head">
-                <p class="kicker">Recent Sessions</p>
-                <p id="statsDbStatus">Connecting SQLite...</p>
+            <article class="stats-history bg-notion-bg border border-notion-border rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+              <div class="stats-history-head flex justify-between items-center">
+                <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Session History</p>
+                <p id="statsDbStatus" class="text-xs font-semibold text-notion-muted">Connecting SQLite...</p>
               </div>
 
-              <div class="stats-filter-row compact" id="statsGameTypeFilters">
-                <button class="stats-filter-btn active" type="button" data-game-filter="all">All Games</button>
-                <button class="stats-filter-btn" type="button" data-game-filter="color_match">Color Match</button>
-                <button class="stats-filter-btn" type="button" data-game-filter="color_memory">Color Memory</button>
+              <!-- Filter cluster in list style -->
+              <div class="stats-filter-row flex gap-2 pb-2 border-b border-notion-border" id="statsGameTypeFilters">
+                <button class="stats-filter-btn px-2.5 py-1 bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted active" type="button" data-game-filter="all">All Games</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_match">Color Match</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_memory">Color Memory</button>
               </div>
 
-              <div class="filter-cluster" id="statsDomainFilters">
-                <button class="stats-filter-btn active" type="button" data-domain-filter="all">All Domains</button>
-                <button class="stats-filter-btn" type="button" data-domain-filter="speed">Speed</button>
-                <button class="stats-filter-btn" type="button" data-domain-filter="memory">Memory</button>
-                <button class="stats-filter-btn" type="button" data-domain-filter="attention">Attention</button>
-                <button class="stats-filter-btn" type="button" data-domain-filter="flexibility">Flexibility</button>
-                <button class="stats-filter-btn" type="button" data-domain-filter="problem_solving">Problem Solving</button>
-                <button class="stats-filter-btn" type="button" data-domain-filter="math">Math</button>
+              <div class="filter-cluster flex flex-wrap gap-1.5" id="statsDomainFilters">
+                <button class="stats-filter-btn px-2.5 py-1 bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted active" type="button" data-domain-filter="all">All Domains</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="speed">Speed</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="memory">Memory</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="attention">Attention</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="flexibility">Flexibility</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="problem_solving">Problem Solving</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="math">Math</button>
               </div>
 
-              <div class="stats-empty" id="statsEmpty">No session history yet. Play a game to start building data.</div>
-              <div class="stats-list" id="statsList"></div>
+              <div class="stats-empty border border-dashed border-notion-border rounded p-4 text-center text-xs text-notion-muted font-medium" id="statsEmpty">No session history yet. Play a game to start building data.</div>
+              <div class="stats-list flex flex-col gap-2" id="statsList"></div>
             </article>
 
+            <!-- Stats Compare Modal -->
             <section class="stats-compare-modal hidden" id="statsCompareModal">
-              <article class="stats-compare-card">
-                <div class="stats-compare-head">
+              <article class="stats-compare-card bg-notion-bg rounded-lg border border-notion-border p-6 max-w-[540px] w-full flex flex-col gap-4 shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
+                <div class="stats-compare-head flex justify-between items-start">
                   <div>
-                    <p class="kicker">Compare With History</p>
-                    <h3 id="statsCompareTitle">Color Match</h3>
-                    <p id="statsCompareSummary">0 sessions · Best 0.00</p>
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Compare With History</p>
+                    <h3 id="statsCompareTitle" class="text-lg font-bold text-notion-text">Color Match</h3>
+                    <p id="statsCompareSummary" class="text-xs text-notion-muted">0 sessions · Best 0.00</p>
                   </div>
-                  <button class="soft-btn small" id="statsCompareCloseBtn" type="button">Close</button>
+                  <button class="soft-btn px-3 py-1.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold text-notion-text rounded cursor-pointer transition-colors" id="statsCompareCloseBtn" type="button">Close</button>
                 </div>
 
-                <div class="stats-compare-grid">
-                  <section class="stats-compare-block">
-                    <p class="kicker">Top 10 Scores</p>
-                    <ol class="result-top10-list" id="statsCompareTop10"></ol>
+                <div class="stats-compare-grid grid grid-cols-2 gap-4">
+                  <section class="stats-compare-block bg-notion-bg border border-notion-border rounded p-3 flex flex-col gap-2">
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Top 10 Scores</p>
+                    <ol class="result-top10-list flex flex-col gap-1" id="statsCompareTop10"></ol>
                   </section>
 
-                  <section class="stats-compare-block">
-                    <p class="kicker">Recent Sessions</p>
-                    <ul class="stats-compare-history" id="statsCompareHistory"></ul>
+                  <section class="stats-compare-block bg-notion-bg border border-notion-border rounded p-3 flex flex-col gap-2">
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Recent Sessions</p>
+                    <ul class="stats-compare-history flex flex-col gap-1" id="statsCompareHistory"></ul>
                   </section>
                 </div>
               </article>
             </section>
           </section>
 
-          <section class="view" id="colorMemoryView">
-            <header class="mode-header">
-              <button class="soft-btn small" type="button" data-back="dashboardView">Back</button>
-              <p class="mode-label">BrainDash <strong>Color Memory</strong></p>
-              <div class="mode-hud compact">
-                <span>Total <strong id="memTotalScoreHud">0.00</strong>/50</span>
-                <span>Round <strong id="memRoundHud">1/5</strong></span>
+          <!-- 🎨 VIEW: COLOR MEMORY -->
+          <section class="view flex flex-col gap-6" id="colorMemoryView">
+            <header class="mode-header flex items-center justify-between pb-3 border-b border-notion-border">
+              <button class="soft-btn px-3 py-1.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold text-notion-text rounded cursor-pointer transition-colors" type="button" data-back="dashboardView">Back</button>
+              <p class="mode-label text-sm text-notion-muted">BrainDash <strong class="text-notion-text">Color Memory</strong></p>
+              <div class="mode-hud compact flex items-center gap-4 text-xs font-medium text-notion-muted">
+                <span>🎯 <strong id="memTotalScoreHud" class="text-notion-text">0.00</strong>/50</span>
+                <span>Round <strong id="memRoundHud" class="text-notion-text">1/5</strong></span>
               </div>
             </header>
 
-            <section class="memory-session panel">
-              <div class="memory-top">
+            <section class="memory-session flex flex-col gap-6">
+              <div class="memory-top bg-notion-bg border border-notion-border rounded-lg p-5 flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                 <div>
-                  <p class="kicker">Color Memory</p>
-                  <h2 id="memRoundTitle">Round 1/5</h2>
+                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">HSB Retention</p>
+                  <h2 id="memRoundTitle" class="text-lg font-bold text-notion-text">Round 1/5</h2>
                 </div>
-                <div class="memory-top-actions">
-                  <div class="segmented-bars" id="memProgress"></div>
-                  <button class="soft-btn small" id="memStartBtn" type="button">Start Session</button>
+                <div class="memory-top-actions flex items-center gap-4">
+                  <div class="segmented-bars flex gap-1" id="memProgress"></div>
+                  <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="memStartBtn" type="button">Start Session</button>
                 </div>
               </div>
 
-              <div class="memory-memorize" id="memMemorizePanel">
-                <h3>Memorize the Hue</h3>
-                <p class="phase-label">Phase 01: Retention</p>
-                <div class="target-color" id="memTargetSwatch"></div>
-                <p class="countdown" id="memCountdown">5.00</p>
-                <p class="countdown-caption">Seconds to remember</p>
-                <button class="soft-btn" id="memSkipBtn" type="button">Skip to Match</button>
+              <!-- Phase 1: Memorization Stage -->
+              <div class="memory-memorize bg-notion-bg border border-notion-border rounded-lg p-8 flex flex-col items-center gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]" id="memMemorizePanel">
+                <h3 class="text-xl font-bold text-notion-text">Memorize the Hue</h3>
+                <p class="phase-label text-[10px] font-bold text-notion-muted tracking-wider uppercase">Phase 01: Retention</p>
+                <div class="target-color w-40 h-40 rounded-lg border border-notion-border" id="memTargetSwatch"></div>
+                <p class="countdown text-3xl font-extrabold text-[#C04D4D]" id="memCountdown">5.00</p>
+                <p class="countdown-caption text-[10px] text-notion-muted font-medium tracking-wide">Seconds to remember</p>
+                <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors mt-2" id="memSkipBtn" type="button">Skip to Match</button>
               </div>
 
-              <div class="memory-adjust hidden" id="memAdjustPanel">
-                <article class="slider-panel">
-                  <p class="kicker">Adjust HSB</p>
-                  <div class="slider-columns">
-                    <div class="slider-axis">
-                      <p>Hue</p>
-                      <div class="slider-input-shell hue-track">
-                        <input id="memHueSlider" class="slider-range" type="range" min="0" max="360" value="180" aria-label="Hue slider" />
+              <!-- Phase 2: Calibration Stage -->
+              <div class="memory-adjust grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6 hidden" id="memAdjustPanel">
+                <article class="slider-panel bg-notion-bg border border-notion-border rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Adjust HSB</p>
+                  <div class="slider-columns flex justify-around">
+                    <div class="slider-axis flex flex-col items-center gap-2">
+                      <p class="text-[10px] font-bold text-notion-muted tracking-wider">Hue</p>
+                      <div class="slider-input-shell hue-track flex items-center justify-center">
+                        <input id="memHueSlider" class="slider-range cursor-ns-resize" type="range" min="0" max="360" value="180" aria-label="Hue slider" />
                       </div>
-                      <span id="memHueValue">180</span>
+                      <span id="memHueValue" class="text-xs font-bold text-notion-text">180</span>
                     </div>
 
-                    <div class="slider-axis">
-                      <p>Sat</p>
-                      <div class="slider-input-shell sat-track">
-                        <input id="memSatSlider" class="slider-range" type="range" min="0" max="100" value="50" aria-label="Saturation slider" />
+                    <div class="slider-axis flex flex-col items-center gap-2">
+                      <p class="text-[10px] font-bold text-notion-muted tracking-wider">Sat</p>
+                      <div class="slider-input-shell sat-track flex items-center justify-center">
+                        <input id="memSatSlider" class="slider-range cursor-ns-resize" type="range" min="0" max="100" value="50" aria-label="Saturation slider" />
                       </div>
-                      <span id="memSatValue">50</span>
+                      <span id="memSatValue" class="text-xs font-bold text-notion-text">50</span>
                     </div>
 
-                    <div class="slider-axis">
-                      <p>Val</p>
-                      <div class="slider-input-shell bri-track">
-                        <input id="memBriSlider" class="slider-range" type="range" min="0" max="100" value="50" aria-label="Brightness slider" />
+                    <div class="slider-axis flex flex-col items-center gap-2">
+                      <p class="text-[10px] font-bold text-notion-muted tracking-wider">Val</p>
+                      <div class="slider-input-shell bri-track flex items-center justify-center">
+                        <input id="memBriSlider" class="slider-range cursor-ns-resize" type="range" min="0" max="100" value="50" aria-label="Brightness slider" />
                       </div>
-                      <span id="memBriValue">50</span>
+                      <span id="memBriValue" class="text-xs font-bold text-notion-text">50</span>
                     </div>
                   </div>
 
-                  <div class="adjust-meta">
-                    <p>Average Error <strong id="memAverageErrorInline">0.0%</strong></p>
-                    <p>Speed Bonus <strong id="memSpeedInline">+0 XP</strong></p>
+                  <div class="adjust-meta flex flex-col gap-1 border-t border-notion-border pt-3 text-xs text-notion-muted">
+                    <p>Average Error <strong id="memAverageErrorInline" class="font-bold text-notion-text">0.0%</strong></p>
+                    <p>Speed Bonus <strong id="memSpeedInline" class="font-bold text-[#448361]">+0 XP</strong></p>
                   </div>
                 </article>
 
-                <article class="preview-panel">
-                  <p class="hex-pill">Current HEX <strong id="memCurrentHex">#556B2F</strong></p>
-                  <div class="preview-color" id="memPreview"></div>
-                  <button class="prime-btn" id="memConfirmBtn" type="button">Confirm Selection</button>
-                  <p class="preview-hint">Adjust sliders to match the memorized shade.</p>
+                <article class="preview-panel bg-notion-bg border border-notion-border rounded-lg p-5 flex flex-col justify-between gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+                  <p class="hex-pill px-3 py-1 bg-notion-bg border border-notion-border rounded text-xs font-semibold">Current HEX <strong id="memCurrentHex" class="font-bold text-notion-text">#556B2F</strong></p>
+                  <div class="preview-color w-full h-40 rounded-lg border border-notion-border" id="memPreview"></div>
+                  <div class="flex flex-col gap-2">
+                    <button class="prime-btn w-full py-2.5 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-sm font-semibold rounded cursor-pointer transition-colors" id="memConfirmBtn" type="button">Confirm Selection</button>
+                    <p class="preview-hint text-[10px] text-notion-muted">Adjust sliders to match the memorized shade.</p>
+                  </div>
                 </article>
               </div>
 
+              <!-- Round Result Overlays and Summary -->
               <section class="memory-result-modal hidden" id="memResultModal">
-                <div class="memory-result" id="memResultCard">
-                  <article class="dialed-card" id="memDialedCard">
-                    <section class="dialed-half dialed-guess" id="memDialedGuess">
-                      <p class="dialed-step" id="memDialedStep">1/5</p>
-
-                      <div class="dialed-selection">
-                        <p>Your selection</p>
-                        <strong id="memGuessHsb">H180 S50 B50</strong>
+                <div class="memory-result w-full max-w-[540px] mx-auto flex flex-col gap-6" id="memResultCard">
+                  <!-- Dialed selection cards -->
+                  <article class="dialed-card bg-notion-bg border border-notion-border rounded-lg overflow-hidden flex flex-col shadow-[0_4px_12px_rgba(0,0,0,0.04)]" id="memDialedCard">
+                    <section class="dialed-half bg-notion-bg p-5 flex justify-between items-center border-b border-notion-border" id="memDialedGuess">
+                      <div class="flex flex-col gap-1">
+                        <p class="dialed-step text-xs font-bold text-notion-muted uppercase tracking-wider">Round <span id="memDialedStep">1/5</span></p>
+                        <div class="dialed-selection text-xs">
+                          <p class="text-notion-muted">Your selection</p>
+                          <strong id="memGuessHsb" class="text-sm font-semibold text-notion-text">H180 S50 B50</strong>
+                        </div>
                       </div>
-
-                      <div class="dialed-score-block">
-                        <p class="dialed-score-value" id="memRoundScoreValue">0.00</p>
-                        <p class="dialed-score-caption" id="memRoundCaption">Calibrating confidence.</p>
+                      
+                      <div class="dialed-score-block text-right">
+                        <p class="dialed-score-value text-3xl font-extrabold text-[#C04D4D]" id="memRoundScoreValue">0.00</p>
+                        <p class="dialed-score-caption text-xs font-semibold text-notion-muted" id="memRoundCaption">Calibrating confidence.</p>
                       </div>
                     </section>
 
-                    <section class="dialed-half dialed-original" id="memDialedOriginal">
-                      <div class="dialed-selection">
-                        <p>Original</p>
-                        <strong id="memTargetHsb">H180 S50 B50</strong>
+                    <section class="dialed-half bg-notion-bg p-5 flex justify-between items-center" id="memDialedOriginal">
+                      <div class="dialed-selection text-xs">
+                        <p class="text-notion-muted">Original Target</p>
+                        <strong id="memTargetHsb" class="text-sm font-semibold text-notion-text">H180 S50 B50</strong>
                       </div>
 
-                      <button class="dialed-next" id="memNextBtn" type="button" aria-label="Next memory round">
+                      <button class="dialed-next w-10 h-10 rounded-full border border-notion-border bg-notion-bg hover:bg-notion-bg text-sm text-notion-text font-bold flex items-center justify-center cursor-pointer transition-colors" id="memNextBtn" type="button" aria-label="Next memory round">
                         →
                       </button>
                     </section>
                   </article>
 
-                  <section class="memory-summary-screen hidden" id="memSummaryScreen">
-                    <section class="result-top10 hidden" id="memResultTop10Section">
-                      <div class="result-top10-head">
-                        <p class="kicker">Top 10 · Color Memory</p>
-                        <p id="memResultRank">Rank -</p>
+                  <!-- Final Session Summary Screen -->
+                  <section class="memory-summary-screen bg-notion-bg rounded-lg border border-notion-border p-6 flex flex-col gap-4 shadow-[0_8px_24px_rgba(0,0,0,0.06)] hidden" id="memSummaryScreen">
+                    <section class="result-top10 bg-notion-bg border border-notion-border rounded p-4 flex flex-col gap-2 hidden" id="memResultTop10Section">
+                      <div class="result-top10-head flex justify-between items-center text-xs">
+                        <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Top 10 · Color Memory</p>
+                        <p id="memResultRank" class="font-semibold text-notion-text">Rank -</p>
                       </div>
-                      <ol class="result-top10-list" id="memResultTop10"></ol>
+                      <ol class="result-top10-list flex flex-col gap-1.5" id="memResultTop10"></ol>
                     </section>
 
-                    <p class="memory-result-note">HSB weighted scoring: Hue 5, Saturation 3, Brightness 2.</p>
+                    <p class="memory-result-note text-xs text-notion-muted font-medium leading-normal">HSB weighted scoring: Hue 5, Saturation 3, Brightness 2.</p>
 
-                    <section class="memory-round-summary">
-                      <div class="memory-round-summary-head">
-                        <p class="kicker">Round Color Summary</p>
-                        <p id="memRoundSummaryMeta">0 / 5 recorded</p>
+                    <section class="memory-round-summary bg-notion-bg border border-notion-border rounded p-4 flex flex-col gap-2">
+                      <div class="memory-round-summary-head flex justify-between items-center text-xs">
+                        <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Round Color Summary</p>
+                        <p id="memRoundSummaryMeta" class="text-notion-muted">0 / 5 recorded</p>
                       </div>
-                      <div class="memory-round-log" id="memRoundLog"></div>
+                      <div class="memory-round-log flex flex-col gap-1.5" id="memRoundLog"></div>
                     </section>
 
-                    <div class="breakdown-list">
-                      <article class="break-row">
+                    <div class="breakdown-list flex flex-col gap-3 border-t border-notion-border pt-4">
+                      <article class="break-row grid grid-cols-[100px_1fr_60px] items-center gap-4">
                         <div>
-                          <p class="break-label">Hue</p>
-                          <p class="break-meta" id="memHueMeta">Δ 0°</p>
+                          <p class="break-label text-[10px] font-bold text-notion-muted uppercase">Hue</p>
+                          <p class="break-meta text-[10px] text-notion-muted" id="memHueMeta">Δ 0°</p>
                         </div>
-                        <div class="track"><span class="fill hue" id="memHueFill"></span></div>
-                        <p class="break-score" id="memHueScore">0.00/5</p>
+                        <div class="track h-2 bg-notion-bg rounded-full overflow-hidden">
+                          <span class="fill bg-[#37352F] block h-full" id="memHueFill"></span>
+                        </div>
+                        <p class="break-score text-xs font-semibold text-right" id="memHueScore">0.00/5</p>
                       </article>
 
-                      <article class="break-row">
+                      <article class="break-row grid grid-cols-[100px_1fr_60px] items-center gap-4">
                         <div>
-                          <p class="break-label">Saturation</p>
-                          <p class="break-meta" id="memSatMeta">Δ 0</p>
+                          <p class="break-label text-[10px] font-bold text-notion-muted uppercase">Saturation</p>
+                          <p class="break-meta text-[10px] text-notion-muted" id="memSatMeta">Δ 0</p>
                         </div>
-                        <div class="track"><span class="fill sat" id="memSatFill"></span></div>
-                        <p class="break-score" id="memSatScore">0.00/3</p>
+                        <div class="track h-2 bg-notion-bg rounded-full overflow-hidden">
+                          <span class="fill bg-[#787774] block h-full" id="memSatFill"></span>
+                        </div>
+                        <p class="break-score text-xs font-semibold text-right" id="memSatScore">0.00/3</p>
                       </article>
 
-                      <article class="break-row">
+                      <article class="break-row grid grid-cols-[100px_1fr_60px] items-center gap-4">
                         <div>
-                          <p class="break-label">Brightness</p>
-                          <p class="break-meta" id="memBriMeta">Δ 0</p>
+                          <p class="break-label text-[10px] font-bold text-notion-muted uppercase">Brightness</p>
+                          <p class="break-meta text-[10px] text-notion-muted" id="memBriMeta">Δ 0</p>
                         </div>
-                        <div class="track"><span class="fill bri" id="memBriFill"></span></div>
-                        <p class="break-score" id="memBriScore">0.00/2</p>
+                        <div class="track h-2 bg-notion-bg rounded-full overflow-hidden">
+                          <span class="fill bg-[#E9E9E7] block h-full" id="memBriFill"></span>
+                        </div>
+                        <p class="break-score text-xs font-semibold text-right" id="memBriScore">0.00/2</p>
                       </article>
                     </div>
 
-                    <div class="result-summary">
-                      <p>Session Total <strong id="memTotalScore">0.00 / 50</strong></p>
-                      <p>Average Error <strong id="memAverageError">0.0%</strong></p>
-                      <p>Speed Bonus <strong id="memSpeedBonus">+0 XP</strong></p>
+                    <div class="result-summary flex justify-between items-center border-t border-notion-border pt-4 text-xs font-medium text-notion-muted">
+                      <p>Session Total <strong id="memTotalScore" class="text-sm font-bold text-notion-text">0.00 / 50</strong></p>
+                      <p>Average Error <strong id="memAverageError" class="text-sm font-bold text-notion-text">0.0%</strong></p>
+                      <p>Speed Bonus <strong id="memSpeedBonus" class="text-sm font-bold text-[#448361]">+0 XP</strong></p>
                     </div>
 
-                    <div class="overlay-actions">
-                      <button class="prime-btn" id="memSummaryPlayAgain" type="button">Play Again</button>
-                      <button class="soft-btn" id="memSummaryBack" type="button">Back to Dashboard</button>
+                    <div class="overlay-actions flex justify-center gap-3 border-t border-notion-border pt-4">
+                      <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="memSummaryPlayAgain" type="button">Play Again</button>
+                      <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="memSummaryBack" type="button">Back to Dashboard</button>
                     </div>
                   </section>
-                  </div>
                 </div>
               </section>
             </section>
           </section>
 
+          <!-- ⚙️ VIEW: SETTINGS -->
           <section class="view" id="settingsView">
-            <article class="settings-card panel">
-              <p class="kicker">Settings</p>
-              <h2>Session Controls</h2>
-              <p>
+            <article class="settings-card bg-notion-bg border border-notion-border rounded-lg p-6 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+              <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Configuration</p>
+              <h2 class="text-xl font-bold text-notion-text">Session Controls</h2>
+              <p class="text-xs text-notion-muted leading-relaxed">
                 Use Dashboard to launch drills. Stats mode includes full HSB weighted scoring with formula parity
                 from the technical readme.
               </p>
-              <div class="settings-list">
-                <p>Arrow Left / Right controls are enabled in Color Match.</p>
-                <p>Color Memory runs 5 rounds with maximum 50 points.</p>
-                <p>Top status score aggregates points from all active drills.</p>
+              <div class="settings-list flex flex-col gap-2 mt-2 text-xs font-medium text-notion-text">
+                <p>Arrow Left / Right keyboard controls are enabled in Color Match.</p>
+                <p>Color Memory runs 5 rounds with maximum 50 points total.</p>
+                <p>Top status score aggregates points from all active drills stored in local SQLite database.</p>
               </div>
             </article>
           </section>
