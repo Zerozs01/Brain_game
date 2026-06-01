@@ -1129,8 +1129,18 @@
 
         function gameOver() {
           state.isPlaying = false;
-          const score = state.level - 1;
-          sqRefs.resultScore.textContent = String(score);
+          const rawScore = state.level - 1;
+          const weightedScore = typeof calculateSequenceScore === 'function'
+            ? calculateSequenceScore(state.level)
+            : rawScore;
+
+          sqRefs.resultScore.textContent = String(weightedScore);
+          
+          const tagline = sqRefs.resultModal.querySelector('.cm-result-tagline');
+          if (tagline) {
+            tagline.textContent = `Completed Level ${rawScore}. Superb spatial reasoning.`;
+          }
+
           sqRefs.resultModal.classList.remove('hidden');
 
           // Save score to local SQLite Database!
@@ -1139,7 +1149,7 @@
             saveSessionToDatabase({
               gameType: "sequence_memory",
               cognitiveDomain: "memory",
-              score: score,
+              score: weightedScore,
               accuracy: 100,
               durationSeconds: Math.round(duration),
               roundCount: state.level,

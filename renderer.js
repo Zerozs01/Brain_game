@@ -263,6 +263,34 @@ function formatGameTypeLabel(gameType) {
   return String(gameType || "Unknown").replaceAll("_", " ");
 }
 
+/**
+ * Calculate Sequence Memory Score based on Human Benchmark Distribution
+ * Average peak is Level 9. Elite tier starts at Level 14+.
+ * @param {number} finalLevel - The level the user reached before failing
+ * @returns {number} - Weighted score
+ */
+function calculateSequenceScore(finalLevel) {
+  const AVERAGE_PEAK = 9;
+  
+  if (finalLevel <= 1) return 0;
+
+  let score = 0;
+
+  if (finalLevel <= AVERAGE_PEAK) {
+    // Linear scaling: เลเวลละ 5 แต้ม (Max 40 แต้มที่จุดเฉลี่ย)
+    score = (finalLevel - 1) * 5;
+  } else {
+    // Exponential scaling: ทะลุค่าเฉลี่ยปุ๊บ คะแนนจะก้าวกระโดด
+    const baseScore = 40; 
+    const extraLevels = finalLevel - AVERAGE_PEAK;
+    
+    // บูสต์ด้วย Base multiplier + Exponential curve
+    score = baseScore + (extraLevels * 10) + (Math.pow(extraLevels, 2) * 2);
+  }
+
+  return Math.floor(score);
+}
+
 function resolveGameDomain(gameType, cognitiveDomain) {
   const explicit = String(cognitiveDomain || "").trim().toLowerCase();
   if (explicit) {
