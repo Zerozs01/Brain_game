@@ -12,6 +12,8 @@
     />
     <link rel="stylesheet" href="tailwind.generated.css" />
     <link rel="stylesheet" href="styles.css" />
+    <!-- Load Chart.js for Cognitive Evaluation Radar Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body class="bg-notion-bg text-notion-text font-notion h-full antialiased selection:bg-notion-purple">
     <svg class="icon-sprite" aria-hidden="true" focusable="false">
@@ -365,37 +367,72 @@
                 </article>
               </div>
 
-              <!-- Right Column: Top 10 By Game (Green Card) -->
+              <!-- Right Column: Cognitive Evaluation (Green Card) -->
               <article class="stats-top10 bg-notion-green border border-[#35483a] rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-                <div class="stats-top10-head">
-                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Top 10 By Game</p>
-                  <p class="text-xs text-notion-muted">Compact summary with compare tool</p>
+                <div class="stats-top10-head flex flex-col gap-1 pb-2 border-b border-[#35483a]">
+                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Cognitive Evaluation</p>
+                  <p class="text-xs text-notion-muted">Radar visualization & rank summary</p>
                 </div>
-                <div class="stats-top10-grid flex flex-col gap-3" id="statsTopByGame"></div>
+                
+                <!-- Top Half (Ranking System) -->
+                <div class="flex flex-col gap-3 p-4 bg-[#191919]/40 border border-[#35483a] rounded-lg">
+                  <div class="flex justify-between items-center">
+                    <p class="text-xs font-semibold text-notion-muted uppercase tracking-wider">Overall Performance Rank</p>
+                    <span id="evalRankValue" class="text-3xl font-black text-white px-2 py-0.5 bg-[#2B3A31] border border-[#448361] rounded">--</span>
+                  </div>
+                  
+                  <div class="flex flex-col gap-1.5 mt-2">
+                    <div class="flex justify-between text-[11px] text-notion-muted font-medium">
+                      <span>Rank Progress</span>
+                      <span id="evalScoreLabel" class="text-white font-bold">0.0 / 10</span>
+                    </div>
+                    <div class="w-full h-3.5 bg-[#191919] border border-[#35483a] rounded-full overflow-hidden p-0.5">
+                      <div id="evalRankProgress" class="h-full rounded-full bg-gradient-to-r from-purple-500 via-blue-500 to-emerald-500 transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Bottom Half (Radar Chart) -->
+                <div class="relative w-full h-[260px] flex items-center justify-center bg-[#191919]/40 border border-[#35483a] rounded-lg p-3 mt-1">
+                  <canvas id="core-tracks-radar" class="w-full h-full"></canvas>
+                </div>
               </article>
             </div>
 
             <article class="stats-history bg-notion-bg border border-notion-border rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-              <div class="stats-history-head flex justify-between items-center">
+              <div class="stats-history-head flex justify-between items-center relative">
                 <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Session History</p>
-                <p id="statsDbStatus" class="text-xs font-semibold text-notion-muted">Connecting SQLite...</p>
+                <div class="flex items-center gap-3">
+                  <p id="statsDbStatus" class="text-xs font-semibold text-notion-muted">Connecting SQLite...</p>
+                  
+                  <!-- Filter Toggle Button (Funnel Icon) -->
+                  <button id="domainFilterToggleBtn" class="p-1.5 rounded bg-[#2D2D2D] hover:bg-[#3A3A3A] border border-[#3E3E3E] text-notion-text cursor-pointer transition-colors flex items-center justify-center" type="button" title="Toggle Filters">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Dropdown menu (Absolute float) -->
+                <div id="domainFilterDropdown" class="hidden absolute right-0 top-9 z-10 w-48 bg-[#191919] border border-[#333333] rounded-lg shadow-xl p-3 flex flex-col gap-2 transition-all">
+                  <p class="text-[9px] font-bold text-notion-muted uppercase tracking-wider border-b border-[#333333] pb-1.5 mb-0.5">Filter by Domain</p>
+                  <div class="flex flex-col gap-1" id="statsDomainFilters">
+                    <button class="stats-filter-btn w-full text-left px-2 py-1 bg-[#2D2D2D] border border-[#3E3E3E] rounded text-[11px] font-semibold text-notion-text active" type="button" data-domain-filter="all">All Domains</button>
+                    <button class="stats-filter-btn w-full text-left px-2 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-[11px] font-semibold text-notion-muted" type="button" data-domain-filter="speed">Speed</button>
+                    <button class="stats-filter-btn w-full text-left px-2 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-[11px] font-semibold text-notion-muted" type="button" data-domain-filter="memory">Memory</button>
+                    <button class="stats-filter-btn w-full text-left px-2 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-[11px] font-semibold text-notion-muted" type="button" data-domain-filter="attention">Attention</button>
+                    <button class="stats-filter-btn w-full text-left px-2 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-[11px] font-semibold text-notion-muted" type="button" data-domain-filter="flexibility">Flexibility</button>
+                    <button class="stats-filter-btn w-full text-left px-2 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-[11px] font-semibold text-notion-muted" type="button" data-domain-filter="problem_solving">Problem Solving</button>
+                    <button class="stats-filter-btn w-full text-left px-2 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-[11px] font-semibold text-notion-muted" type="button" data-domain-filter="math">Math</button>
+                  </div>
+                </div>
               </div>
 
-              <!-- Filter cluster in list style -->
+              <!-- Filter game type in list style -->
               <div class="stats-filter-row flex gap-2 pb-2 border-b border-notion-border" id="statsGameTypeFilters">
-                <button class="stats-filter-btn px-2.5 py-1 bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted active" type="button" data-game-filter="all">All Games</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_match">Color Match</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_memory">Color Memory</button>
-              </div>
-
-              <div class="filter-cluster flex flex-wrap gap-1.5" id="statsDomainFilters">
-                <button class="stats-filter-btn px-2.5 py-1 bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted active" type="button" data-domain-filter="all">All Domains</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="speed">Speed</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="memory">Memory</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="attention">Attention</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="flexibility">Flexibility</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="problem_solving">Problem Solving</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-notion-bg border border-notion-border rounded text-xs font-semibold text-notion-muted" type="button" data-domain-filter="math">Math</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-[#2D2D2D] border border-[#3E3E3E] rounded text-xs font-semibold text-notion-text active" type="button" data-game-filter="all">All Games</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_match">Color Match</button>
+                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_memory">Color Memory</button>
               </div>
 
               <div class="stats-empty border border-dashed border-notion-border rounded p-4 text-center text-xs text-notion-muted font-medium" id="statsEmpty">No session history yet. Play a game to start building data.</div>
@@ -632,5 +669,152 @@
     </div>
 
     <script src="renderer.js"></script>
+    <script>
+      // 1. Funnel Filter Dropdown Toggle Menu logic
+      document.addEventListener('DOMContentLoaded', () => {
+        const toggleBtn = document.getElementById('domainFilterToggleBtn');
+        const dropdown = document.getElementById('domainFilterDropdown');
+        
+        if (toggleBtn && dropdown) {
+          toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+          });
+          
+          document.addEventListener('click', (e) => {
+            if (!dropdown.contains(e.target) && e.target !== toggleBtn) {
+              dropdown.classList.add('hidden');
+            }
+          });
+        }
+      });
+
+      // 2. Monkey-patch renderStatsDomainOverview to draw Radar Chart and calculate Rank
+      let myRadarChart = null;
+      let lastLpiValuesJson = '';
+
+      function drawRadarChart(dataValues) {
+        const ctx = document.getElementById('core-tracks-radar');
+        if (!ctx) return;
+        
+        if (myRadarChart) {
+          myRadarChart.destroy();
+        }
+        
+        myRadarChart = new Chart(ctx, {
+          type: 'radar',
+          data: {
+            labels: ['Speed', 'Memory', 'Attention', 'Flexibility', 'Problem Solving', 'Math'],
+            datasets: [{
+              label: 'Cognitive Domain LPI',
+              data: dataValues,
+              backgroundColor: 'rgba(96, 165, 250, 0.15)', // transparent light blue
+              borderColor: '#60A5FA', // blue-400
+              borderWidth: 1.5,
+              pointBackgroundColor: '#10B981', // emerald-500
+              pointBorderColor: '#fff',
+              pointRadius: 3
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: {
+                display: false
+              }
+            },
+            scales: {
+              r: {
+                angleLines: {
+                  color: '#333333'
+                },
+                grid: {
+                  color: '#333333'
+                },
+                pointLabels: {
+                  color: '#D4D4D4',
+                  font: {
+                    size: 9.5,
+                    family: 'Inter',
+                    weight: 'bold'
+                  }
+                },
+                ticks: {
+                  display: false,
+                  maxTicksLimit: 5
+                },
+                suggestedMin: 0,
+                suggestedMax: 100
+              }
+            }
+          }
+        });
+      }
+
+      // Check if renderer loaded and intercept
+      const checkAndPatch = setInterval(() => {
+        if (typeof renderStatsDomainOverview === 'function') {
+          clearInterval(checkAndPatch);
+          const originalRenderStatsDomainOverview = renderStatsDomainOverview;
+
+          renderStatsDomainOverview = function(items, lpiByDomain) {
+            // Call original UI binding
+            originalRenderStatsDomainOverview(items, lpiByDomain);
+            
+            // Calculate cognitive performance rank
+            let totalLpi = 0;
+            let count = 0;
+            const lpiMap = new Map((lpiByDomain || []).map(item => [String(item.cognitiveDomain || '').toLowerCase(), Number(item.lpi || 0)]));
+            
+            const domains = ['speed', 'memory', 'attention', 'flexibility', 'problem_solving', 'math'];
+            const lpiValues = domains.map(d => {
+              const val = lpiMap.get(d);
+              if (val !== undefined && val !== null && val > 0) {
+                totalLpi += val;
+                count++;
+                return val;
+              }
+              return 0;
+            });
+            
+            const lpiValuesJson = JSON.stringify(lpiValues);
+            if (lpiValuesJson === lastLpiValuesJson) {
+              // Avoid redrawing chart and recalculating elements if scores did not change
+              return;
+            }
+            lastLpiValuesJson = lpiValuesJson;
+
+            const avgLpi = count > 0 ? totalLpi / count : 0;
+            
+            // Determine Rank
+            let rank = 'C';
+            if (avgLpi >= 90) rank = 'S';
+            else if (avgLpi >= 80) rank = 'A';
+            else if (avgLpi >= 70) rank = 'B';
+            else if (avgLpi >= 50) rank = 'C';
+            else rank = 'D';
+            
+            if (avgLpi === 0) rank = '--';
+            
+            // Update Rank HTML elements
+            const rankEl = document.getElementById('evalRankValue');
+            if (rankEl) rankEl.textContent = rank;
+            
+            const lpiProgress = document.getElementById('evalRankProgress');
+            if (lpiProgress) {
+              lpiProgress.style.width = `${avgLpi}%`;
+            }
+            const lpiScoreLabel = document.getElementById('evalScoreLabel');
+            if (lpiScoreLabel) {
+              lpiScoreLabel.textContent = `${(avgLpi / 10).toFixed(1)} / 10`;
+            }
+            
+            // Draw/Redraw Radar Chart with domain values
+            drawRadarChart(lpiValues);
+          };
+        }
+      }, 50);
+    </script>
   </body>
 </html>

@@ -5,9 +5,9 @@
   "main": "main.js",
   "scripts": {
     "build:tailwind": "tailwindcss -i ./tailwind.input.css -o ./tailwind.generated.css --minify",
-    "prestart": "npm run build:tailwind",
+    "prestart": "node build-if-changed.js",
     "start": "electron .",
-    "predev": "npm run build:tailwind",
+    "predev": "node build-if-changed.js",
     "dev": "electron .",
     "rebuild-native": "electron-rebuild -f -w better-sqlite3",
     "postinstall": "npm run rebuild-native"
