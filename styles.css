@@ -314,8 +314,9 @@ button {
 }
 
 .category-head {
-  display: grid;
-  gap: 0.2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 .category-title {
@@ -351,13 +352,18 @@ button {
 }
 
 .category-icon.visual {
+  background-color: #2B3A31; /* Dark Green matching Reference Image 2 */
+  color: #10B981; /* Green */
+}
+
+.category-icon.memory-icon {
   background-color: #3C2D43; /* Dark Purple matching Reference Image 2 */
-  color: #C084FC;
+  color: #C084FC; /* Purple */
 }
 
 .category-icon.sound {
   background-color: #273646; /* Dark Blue matching Reference Image 2 */
-  color: #60A5FA;
+  color: #60A5FA; /* Blue */
 }
 
 .launcher-grid {
@@ -1532,6 +1538,7 @@ button {
 .stats-type {
   font-weight: 600;
   font-size: 0.8rem;
+  color: #df9d36;
 }
 
 .stats-main {
@@ -1540,6 +1547,12 @@ button {
 
 .stats-main strong {
   font-size: 0.95rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #a855f7 0%, #3b82f6 50%, #22c55e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
 }
 
 .stats-main p {
@@ -1554,16 +1567,25 @@ button {
 }
 
 .stats-delete-btn {
-  border: 0;
+  border: 1px solid #df9d36;
+  border-radius: var(--radius-sm);
   background: transparent;
-  color: var(--danger);
-  font-size: 0.75rem;
+  color: #df9d36;
+  font-size: 0.72rem;
+  font-weight: 600;
   cursor: pointer;
-  padding: 0.2rem 0.4rem;
+  padding: 0.2rem 0.5rem;
+  transition: all 0.15s ease;
 }
 
 .stats-delete-btn:hover {
-  text-decoration: underline;
+  background-color: #df9d36;
+  color: #43351c;
+}
+
+.stats-history {
+  background-color: #43351c !important;
+  border-color: #5c4b2b !important;
 }
 
 /* Compare Modal */

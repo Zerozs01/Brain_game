@@ -14,6 +14,10 @@ const GAME_METADATA = Object.freeze({
   color_memory: {
     label: "Color Memory",
     cognitiveDomain: "memory"
+  },
+  sequence_memory: {
+    label: "Sequence Memory",
+    cognitiveDomain: "memory"
   }
 });
 
@@ -637,15 +641,62 @@ function formatPlayTime(seconds) {
   return formatDurationLabel(seconds);
 }
 
+function setFilterBtnActiveState(button, isActive) {
+  button.classList.toggle("active", isActive);
+  if (isActive) {
+    button.classList.remove("bg-transparent", "border-transparent", "text-notion-muted");
+    button.classList.add("bg-[#2D2D2D]", "border-[#3E3E3E]", "text-notion-text");
+  } else {
+    button.classList.remove("bg-[#2D2D2D]", "border-[#3E3E3E]", "text-notion-text");
+    button.classList.add("bg-transparent", "border-transparent", "text-notion-muted");
+  }
+}
+
 function updateStatsFilterButtonStates() {
   const { gameType, cognitiveDomain } = appState.stats.filters;
 
   statsGameFilterButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.gameFilter === gameType);
+    const isActive = button.dataset.gameFilter === gameType;
+    setFilterBtnActiveState(button, isActive);
   });
 
+  // Highlight parent dropdown buttons dynamically based on selected game Type
+  const visualBtn = document.getElementById("visualDropdownBtn");
+  if (visualBtn) {
+    const isActive = gameType === "category:visual" || gameType === "color_match";
+    setFilterBtnActiveState(visualBtn, isActive);
+    const svg = visualBtn.querySelector("svg");
+    if (svg) {
+      const isMenuOpen = !document.getElementById("visualDropdownMenu")?.classList.contains("hidden");
+      svg.style.transform = isMenuOpen ? "rotate(180deg)" : "rotate(0deg)";
+    }
+  }
+
+  const memoryBtn = document.getElementById("memoryDropdownBtn");
+  if (memoryBtn) {
+    const isActive = gameType === "category:memory" || gameType === "color_memory" || gameType === "sequence_memory";
+    setFilterBtnActiveState(memoryBtn, isActive);
+    const svg = memoryBtn.querySelector("svg");
+    if (svg) {
+      const isMenuOpen = !document.getElementById("memoryDropdownMenu")?.classList.contains("hidden");
+      svg.style.transform = isMenuOpen ? "rotate(180deg)" : "rotate(0deg)";
+    }
+  }
+
+  const soundBtn = document.getElementById("soundDropdownBtn");
+  if (soundBtn) {
+    const isActive = gameType === "category:sound";
+    setFilterBtnActiveState(soundBtn, isActive);
+    const svg = soundBtn.querySelector("svg");
+    if (svg) {
+      const isMenuOpen = !document.getElementById("soundDropdownMenu")?.classList.contains("hidden");
+      svg.style.transform = isMenuOpen ? "rotate(180deg)" : "rotate(0deg)";
+    }
+  }
+
   statsDomainFilterButtons.forEach((button) => {
-    button.classList.toggle("active", button.dataset.domainFilter === cognitiveDomain);
+    const isActive = button.dataset.domainFilter === cognitiveDomain;
+    setFilterBtnActiveState(button, isActive);
   });
 }
 
@@ -653,8 +704,21 @@ function getFilteredStatsHistory(items) {
   const { gameType, cognitiveDomain } = appState.stats.filters;
 
   return items.filter((item) => {
-    if (gameType !== "all" && item.gameType !== gameType) {
-      return false;
+    if (gameType !== "all") {
+      if (gameType.startsWith("category:")) {
+        const cat = gameType.substring(9);
+        if (cat === "visual" && item.gameType !== "color_match") {
+          return false;
+        }
+        if (cat === "memory" && item.gameType !== "color_memory" && item.gameType !== "sequence_memory") {
+          return false;
+        }
+        if (cat === "sound") {
+          return false; // No sound games yet
+        }
+      } else if (item.gameType !== gameType) {
+        return false;
+      }
     }
 
     if (cognitiveDomain !== "all") {
@@ -1073,6 +1137,49 @@ function bindStatsUi() {
     button.addEventListener("click", () => {
       appState.stats.filters.gameType = button.dataset.gameFilter || "all";
       renderStatsFromCache();
+    });
+  });
+
+  // Dropdown Toggle Logic
+  const dropdownConfigs = [
+    { btnId: "visualDropdownBtn", menuId: "visualDropdownMenu" },
+    { btnId: "memoryDropdownBtn", menuId: "memoryDropdownMenu" },
+    { btnId: "soundDropdownBtn", menuId: "soundDropdownMenu" }
+  ];
+
+  dropdownConfigs.forEach(({ btnId, menuId }) => {
+    const btn = document.getElementById(btnId);
+    const menu = document.getElementById(menuId);
+    if (btn && menu) {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const isHidden = menu.classList.contains("hidden");
+        
+        // Close all dropdowns first
+        dropdownConfigs.forEach(c => {
+          document.getElementById(c.menuId)?.classList.add("hidden");
+          const caret = document.getElementById(c.btnId)?.querySelector("svg");
+          if (caret) caret.style.transform = "rotate(0deg)";
+        });
+
+        if (isHidden) {
+          menu.classList.remove("hidden");
+          const caret = btn.querySelector("svg");
+          if (caret) caret.style.transform = "rotate(180deg)";
+        }
+      });
+    }
+  });
+
+  // Close dropdowns when clicking anywhere outside
+  document.addEventListener("click", () => {
+    dropdownConfigs.forEach(({ menuId, btnId }) => {
+      const menu = document.getElementById(menuId);
+      if (menu && !menu.classList.contains("hidden")) {
+        menu.classList.add("hidden");
+        const caret = document.getElementById(btnId)?.querySelector("svg");
+        if (caret) caret.style.transform = "rotate(0deg)";
+      }
     });
   });
 

@@ -147,14 +147,14 @@
             <div class="dashboard-main-grid flex flex-col lg:grid lg:grid-cols-[1fr_320px] gap-6">
               <!-- Left Column: Games -->
               <div class="flex flex-col gap-6">
-                <!-- Visual Color Tests Section (Callout Yellow Background) -->
+                <!-- Visual Color Tests Section (Callout Green Background) -->
                 <article class="category-panel bg-notion-green rounded-lg border border-notion-border p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
-                  <div class="category-head flex items-center gap-3">
-                    <span class="category-icon visual w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-[#448361]" aria-hidden="true">
+                  <div class="category-head flex flex-row items-center gap-3">
+                    <span class="category-icon visual w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-emerald-400" aria-hidden="true">
                       <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#icon-visual"></use></svg>
                     </span>
                     <div>
-                      <h2 class="text-base font-bold text-white">Visual Color Tests</h2>
+                      <h2 class="text-base font-bold text-white leading-tight">Visual Color Tests</h2>
                       <p class="text-xs text-[#E0E0E0]/80">Reaction + color recall drills</p>
                     </div>
                   </div>
@@ -173,7 +173,22 @@
                       </div>
                       <span class="launcher-cta text-xs font-semibold text-notion-muted">Play →</span>
                     </button>
+                  </div>
+                </article>
 
+                <!-- Memory Tests Section (Callout Purple Background) -->
+                <article class="category-panel bg-notion-purple rounded-lg border border-[#4A3B52] p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                  <div class="category-head flex flex-row items-center gap-3">
+                    <span class="category-icon memory-icon w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-[#C084FC]" aria-hidden="true">
+                      <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#icon-memory"></use></svg>
+                    </span>
+                    <div>
+                      <h2 class="text-base font-bold text-white leading-tight">Memory Tests</h2>
+                      <p class="text-xs text-[#E0E0E0]/80">Spatial recall + precise retention drills</p>
+                    </div>
+                  </div>
+
+                  <div class="launcher-grid flex flex-col gap-2">
                     <!-- Color Memory Button -->
                     <button class="launcher-card w-full flex items-center justify-between p-3.5 rounded-md bg-[#2F2F2F] border border-[#3E3E3E] hover:bg-[#3A3A3A] transition-colors cursor-pointer text-left shadow-[0_1px_2px_rgba(0,0,0,0.01)]" type="button" data-launch="colorMemory">
                       <div class="flex items-center gap-3.5">
@@ -183,6 +198,20 @@
                         <div class="launcher-copy">
                           <h3 class="text-sm font-semibold text-notion-text">Color Memory</h3>
                           <p class="text-xs text-notion-muted">HSB precision memory drill.</p>
+                        </div>
+                      </div>
+                      <span class="launcher-cta text-xs font-semibold text-notion-muted">Play →</span>
+                    </button>
+
+                    <!-- Sequence Memory Button -->
+                    <button id="mode-sequence-btn" class="launcher-card w-full flex items-center justify-between p-3.5 rounded-md bg-[#2F2F2F] border border-[#3E3E3E] hover:bg-[#3A3A3A] transition-colors cursor-pointer text-left shadow-[0_1px_2px_rgba(0,0,0,0.01)]" type="button" data-launch="sequenceMemory">
+                      <div class="flex items-center gap-3.5">
+                        <span class="launcher-icon w-8 h-8 rounded bg-notion-green flex items-center justify-center text-emerald-400" aria-hidden="true">
+                          <svg class="w-4 h-4" viewBox="0 0 24 24"><use href="#icon-grid"></use></svg>
+                        </span>
+                        <div class="launcher-copy">
+                          <h3 class="text-sm font-semibold text-notion-text">Sequence Memory</h3>
+                          <p class="text-xs text-notion-muted">Simon-says style spatial recall.</p>
                         </div>
                       </div>
                       <span class="launcher-cta text-xs font-semibold text-notion-muted">Play →</span>
@@ -210,15 +239,7 @@
                   <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pattern</span>
                 </div>
 
-                <div class="sound-week-block bg-[#2F2F2F] rounded border border-[#3E3E3E] p-3 flex flex-col gap-2">
-                  <div class="compact-head flex items-center justify-between text-xs">
-                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Activity</p>
-                    <p id="dashSoundWeekLabel" class="text-[10px] font-semibold text-notion-text">0/7 active days</p>
-                  </div>
-                  <div class="week-bars sound-week-bars flex justify-between h-8 items-end gap-1" id="dashSoundWeekBars" aria-hidden="true"></div>
-                </div>
-
-                <button class="soft-btn w-full py-2 bg-[#2F2F2F] hover:bg-[#3A3A3A] text-xs font-semibold text-notion-text border border-notion-border rounded transition-colors cursor-pointer" type="button" data-launch="colorMemory">Try Sample Drill</button>
+                <button class="soft-btn w-full py-2 bg-[#2F2F2F] hover:bg-[#3A3A3A] text-xs font-semibold text-notion-text border border-[#3E3E3E] rounded transition-colors cursor-pointer" type="button" data-launch="colorMemory">Try Sample Drill</button>
               </article>
             </div>
 
@@ -228,7 +249,7 @@
               <article class="compact-panel bg-[#2A2A2A] rounded-lg border border-[#3E3E3E] p-4 flex flex-col gap-3 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
                 <div class="compact-head flex justify-between items-center text-xs">
                   <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Streak</p>
-                  <p id="dashWeekActiveLabel" class="text-[10px] font-semibold text-notion-text">0/7 active days</p>
+                  <p id="dashWeekActiveLabel" class="text-gray-200 font-semibold text-lg text-right">0/7 active days</p>
                 </div>
                 <div class="week-bars flex justify-between h-8 items-end gap-1" id="dashWeekBars" aria-hidden="true"></div>
               </article>
@@ -429,10 +450,52 @@
               </div>
 
               <!-- Filter game type in list style -->
-              <div class="stats-filter-row flex gap-2 pb-2 border-b border-notion-border" id="statsGameTypeFilters">
+              <!-- Filter game type in list style with dropdown categories -->
+              <div class="stats-filter-row flex items-center gap-2 pb-2 border-b border-notion-border" id="statsGameTypeFilters">
                 <button class="stats-filter-btn px-2.5 py-1 bg-[#2D2D2D] border border-[#3E3E3E] rounded text-xs font-semibold text-notion-text active" type="button" data-game-filter="all">All Games</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_match">Color Match</button>
-                <button class="stats-filter-btn px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted" type="button" data-game-filter="color_memory">Color Memory</button>
+                
+                <!-- Visual Games Dropdown -->
+                <div class="relative inline-block text-left" id="visualDropdownContainer">
+                  <button id="visualDropdownBtn" class="stats-filter-btn flex items-center gap-1.5 px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted cursor-pointer transition-colors" type="button">
+                    Visual Games
+                    <svg class="w-2.5 h-2.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                  </button>
+                  <div id="visualDropdownMenu" class="hidden absolute left-0 mt-1 w-44 rounded bg-[#222222] border border-[#3E3E3E] shadow-xl z-50 transition-all duration-150">
+                    <div class="py-1 flex flex-col" role="menu" aria-orientation="vertical">
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="category:visual" role="menuitem">All Visual Games</button>
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="color_match" role="menuitem">Color Match</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Memory Games Dropdown (Multi-game dropdown toggle menu) -->
+                <div class="relative inline-block text-left" id="memoryDropdownContainer">
+                  <button id="memoryDropdownBtn" class="stats-filter-btn flex items-center gap-1.5 px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted cursor-pointer transition-colors" type="button">
+                    Memory Games
+                    <svg class="w-2.5 h-2.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                  </button>
+                  <div id="memoryDropdownMenu" class="hidden absolute left-0 mt-1 w-44 rounded bg-[#222222] border border-[#3E3E3E] shadow-xl z-50 transition-all duration-150">
+                    <div class="py-1 flex flex-col" role="menu" aria-orientation="vertical">
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="category:memory" role="menuitem">All Memory Games</button>
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="color_memory" role="menuitem">Color Memory</button>
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="sequence_memory" role="menuitem">Sequence Memory</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Sound Games Dropdown -->
+                <div class="relative inline-block text-left" id="soundDropdownContainer">
+                  <button id="soundDropdownBtn" class="stats-filter-btn flex items-center gap-1.5 px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted cursor-pointer transition-colors" type="button">
+                    Sound Games
+                    <svg class="w-2.5 h-2.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                  </button>
+                  <div id="soundDropdownMenu" class="hidden absolute left-0 mt-1 w-44 rounded bg-[#222222] border border-[#3E3E3E] shadow-xl z-50 transition-all duration-150">
+                    <div class="py-1 flex flex-col" role="menu" aria-orientation="vertical">
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="category:sound" role="menuitem">All Sound Games</button>
+                      <div class="px-4 py-2 text-xs font-semibold text-notion-muted italic select-none">No sound games yet</div>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="stats-empty border border-dashed border-notion-border rounded p-4 text-center text-xs text-notion-muted font-medium" id="statsEmpty">No session history yet. Play a game to start building data.</div>
@@ -648,6 +711,58 @@
             </section>
           </section>
 
+          <!-- 🕹️ VIEW: SEQUENCE MEMORY -->
+          <section class="view flex flex-col gap-6" id="sequenceMemoryView">
+            <header class="mode-header flex items-center justify-between pb-3 border-b border-notion-border">
+              <button class="soft-btn px-3 py-1.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold text-notion-text rounded cursor-pointer transition-colors" type="button" data-back="dashboardView" id="sqPauseBtn">Pause</button>
+              <p class="mode-label text-sm text-notion-muted">BrainDash <strong class="text-notion-text">Sequence Memory</strong></p>
+              <div class="mode-hud flex items-center gap-4 text-xs font-medium text-notion-muted">
+                <span>Level: <strong id="sqLevel" class="text-notion-text">1</strong></span>
+                <span>Score: <strong id="sqScore" class="text-notion-text">0</strong></span>
+              </div>
+            </header>
+
+            <section class="sq-stage bg-notion-bg rounded-lg border border-notion-border p-8 flex flex-col items-center gap-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+              <h2 class="text-xl font-bold text-notion-text" id="sqInstruction">Remember the sequence!</h2>
+              <div class="accent-rule w-12 h-1 bg-[#2D2D2D] rounded-full" aria-hidden="true"></div>
+
+              <!-- 3x3 Spatial Grid -->
+              <div class="grid grid-cols-3 gap-2.5 max-w-[280px] w-full" id="sqGrid">
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="0"></button>
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="1"></button>
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="2"></button>
+                
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="3"></button>
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="4"></button>
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="5"></button>
+                
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="6"></button>
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="7"></button>
+                <button class="sq-tile w-20 h-20 bg-[#2A2A2A] border border-[#3E3E3E] rounded-lg hover:bg-[#353535] cursor-pointer transition-all duration-150 flex items-center justify-center text-xl font-bold text-white/10" type="button" data-index="8"></button>
+              </div>
+
+              <!-- Game overlay / info panel -->
+              <div id="sqOverlay" class="text-center flex flex-col gap-3 mt-2">
+                <button class="prime-btn px-6 py-2.5 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-sm font-semibold rounded cursor-pointer transition-colors" id="sqStartBtn" type="button">Start Game</button>
+              </div>
+            </section>
+
+            <!-- Results Screen -->
+            <section class="cm-result-modal hidden" id="sqResultModal">
+              <article class="cm-result-card bg-notion-bg border border-notion-border p-6 max-w-[480px] w-full text-center flex flex-col gap-4 shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
+                <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Session Complete</p>
+                <h3 class="text-xl font-bold text-notion-text">Sequence Memory Results</h3>
+                <p class="cm-result-score text-5xl font-extrabold text-[#C04D4D]" id="sqResultScore">0</p>
+                <p class="cm-result-tagline text-xs text-notion-muted">Superb spatial reasoning.</p>
+
+                <div class="overlay-actions flex justify-center gap-3 border-t border-notion-border pt-4">
+                  <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="sqResultPlayAgain" type="button">Play Again</button>
+                  <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="sqResultBack" type="button">Back to Dashboard</button>
+                </div>
+              </article>
+            </section>
+          </section>
+
           <!-- ⚙️ VIEW: SETTINGS -->
           <section class="view" id="settingsView">
             <article class="settings-card bg-notion-bg border border-notion-border rounded-lg p-6 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
@@ -815,6 +930,234 @@
           };
         }
       }, 50);
+
+      // 3. Sequence Memory Game Module
+      (function() {
+        const sqRefs = {
+          view: document.getElementById('sequenceMemoryView'),
+          grid: document.getElementById('sqGrid'),
+          tiles: Array.from(document.querySelectorAll('.sq-tile')),
+          startBtn: document.getElementById('sqStartBtn'),
+          pauseBtn: document.getElementById('sqPauseBtn'),
+          levelLabel: document.getElementById('sqLevel'),
+          scoreLabel: document.getElementById('sqScore'),
+          instruction: document.getElementById('sqInstruction'),
+          overlay: document.getElementById('sqOverlay'),
+          resultModal: document.getElementById('sqResultModal'),
+          resultScore: document.getElementById('sqResultScore'),
+          resultPlayAgain: document.getElementById('sqResultPlayAgain'),
+          resultBack: document.getElementById('sqResultBack')
+        };
+
+        const state = {
+          sequence: [],
+          playerStep: 0,
+          level: 1,
+          isPlaying: false,
+          isFlashActive: false,
+          startedAtMs: 0
+        };
+
+        // Web Audio API context initialization
+        let audioCtx = null;
+        function initAudio() {
+          if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          }
+          if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+          }
+        }
+
+        function playTone(index) {
+          try {
+            initAudio();
+            const oscillator = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            oscillator.type = 'sine';
+            oscillator.frequency.value = 200 + (index * 60); // unique pitch per tile
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime); // soft volume
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+            
+            oscillator.start(audioCtx.currentTime);
+            oscillator.stop(audioCtx.currentTime + 0.3);
+          } catch (e) {
+            console.error('Audio Playback failed:', e);
+          }
+        }
+
+        // View switching integration
+        document.addEventListener('DOMContentLoaded', () => {
+          // Listen to dashboard launches
+          document.addEventListener('click', (event) => {
+            const launchBtn = event.target.closest('[data-launch="sequenceMemory"]');
+            if (launchBtn) {
+              event.stopPropagation();
+              // Hide other views
+              document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+              sqRefs.view.classList.add('active');
+              resetGame();
+            }
+          });
+
+          sqRefs.startBtn.addEventListener('click', startGame);
+          sqRefs.pauseBtn.addEventListener('click', pauseGame);
+          sqRefs.resultPlayAgain.addEventListener('click', startGame);
+          sqRefs.resultBack.addEventListener('click', exitGame);
+
+          // Tile click bindings
+          sqRefs.tiles.forEach(tile => {
+            tile.addEventListener('click', () => {
+              if (!state.isPlaying || state.isFlashActive) return;
+              const index = parseInt(tile.dataset.index);
+              handleTileClick(index, tile);
+            });
+          });
+        });
+
+        function resetGame() {
+          state.sequence = [];
+          state.playerStep = 0;
+          state.level = 1;
+          state.isPlaying = false;
+          state.isFlashActive = false;
+          sqRefs.levelLabel.textContent = '1';
+          sqRefs.scoreLabel.textContent = '0';
+          sqRefs.instruction.textContent = 'Click start to begin the spatial memory challenge!';
+          sqRefs.overlay.classList.remove('hidden');
+          sqRefs.resultModal.classList.add('hidden');
+          sqRefs.tiles.forEach(tile => {
+            tile.style.backgroundColor = '#2A2A2A';
+          });
+        }
+
+        function startGame() {
+          resetGame();
+          state.isPlaying = true;
+          state.startedAtMs = Date.now();
+          sqRefs.overlay.classList.add('hidden');
+          sqRefs.resultModal.classList.add('hidden');
+          nextLevel();
+        }
+
+        function pauseGame() {
+          state.isPlaying = false;
+          exitGame();
+        }
+
+        function exitGame() {
+          sqRefs.view.classList.remove('active');
+          const dash = document.getElementById('dashboardView');
+          if (dash) dash.classList.add('active');
+          if (typeof loadStatsOverview === 'function') {
+            loadStatsOverview(); // refresh dashboard stats
+          }
+        }
+
+        function nextLevel() {
+          state.playerStep = 0;
+          sqRefs.levelLabel.textContent = String(state.level);
+          sqRefs.scoreLabel.textContent = String(state.level - 1);
+          sqRefs.instruction.textContent = `Watch Level ${state.level}...`;
+          
+          // Random tile from 0 to 8
+          const nextTile = Math.floor(Math.random() * 9);
+          state.sequence.push(nextTile);
+
+          // Flash sequence to the user
+          flashSequence();
+        }
+
+        async function flashSequence() {
+          state.isFlashActive = true;
+          await sleep(600);
+
+          for (let i = 0; i < state.sequence.length; i++) {
+            if (!state.isPlaying) return;
+            const tileIndex = state.sequence[i];
+            const tile = sqRefs.tiles[tileIndex];
+            
+            // Flash on
+            tile.style.backgroundColor = '#3b82f6'; // Bright blue
+            playTone(tileIndex);
+            await sleep(350);
+            
+            // Flash off
+            tile.style.backgroundColor = '#2A2A2A';
+            await sleep(200);
+          }
+
+          state.isFlashActive = false;
+          sqRefs.instruction.textContent = 'Repeat the sequence!';
+        }
+
+        function handleTileClick(index, tile) {
+          const expectedIndex = state.sequence[state.playerStep];
+          
+          if (index === expectedIndex) {
+            // Correct click
+            playTone(index);
+            tile.style.backgroundColor = '#10b981'; // Flash green success
+            setTimeout(() => {
+              tile.style.backgroundColor = '#2A2A2A';
+            }, 150);
+
+            state.playerStep++;
+            if (state.playerStep === state.sequence.length) {
+              state.level++;
+              sqRefs.instruction.textContent = 'Excellent! Get ready...';
+              setTimeout(() => {
+                if (state.isPlaying) nextLevel();
+              }, 800);
+            }
+          } else {
+            // Wrong click - Game Over!
+            playTone(4); // play bad tone or index 4
+            tile.style.backgroundColor = '#ef4444'; // Flash red failure
+            setTimeout(() => {
+              tile.style.backgroundColor = '#2A2A2A';
+            }, 300);
+
+            gameOver();
+          }
+        }
+
+        function gameOver() {
+          state.isPlaying = false;
+          const score = state.level - 1;
+          sqRefs.resultScore.textContent = String(score);
+          sqRefs.resultModal.classList.remove('hidden');
+
+          // Save score to local SQLite Database!
+          if (typeof saveSessionToDatabase === 'function') {
+            const duration = (Date.now() - state.startedAtMs) / 1000;
+            saveSessionToDatabase({
+              gameType: "sequence_memory",
+              cognitiveDomain: "memory",
+              score: score,
+              accuracy: 100,
+              durationSeconds: Math.round(duration),
+              roundCount: state.level,
+              detail: {
+                level: state.level
+              }
+            }).then(() => {
+              if (typeof loadStatsOverview === 'function') {
+                loadStatsOverview();
+              }
+            });
+          }
+        }
+
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+      })();
     </script>
   </body>
 </html>
