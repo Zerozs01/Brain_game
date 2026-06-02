@@ -7,7 +7,8 @@ let db;
 const DOMAIN_BY_GAME_TYPE = Object.freeze({
   color_match: "speed",
   color_memory: "memory",
-  sequence_memory: "memory"
+  sequence_memory: "memory",
+  time: "attention"
 });
 
 const PLAY_TIME_SECONDS_SQL = `

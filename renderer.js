@@ -3,7 +3,7 @@ const GAME_COLORS = [
   { word: "blue", hex: "#007aff" },
   { word: "green", hex: "#34c759" },
   { word: "yellow", hex: "#ffcc00" },
-  { word: "black", hex: "#222222" }
+  { word: "black", hex: "#5E5E5E" }
 ];
 
 const GAME_METADATA = Object.freeze({
@@ -18,6 +18,10 @@ const GAME_METADATA = Object.freeze({
   sequence_memory: {
     label: "Sequence Memory",
     cognitiveDomain: "memory"
+  },
+  time: {
+    label: "Time Estimation",
+    cognitiveDomain: "attention"
   }
 });
 
@@ -42,7 +46,8 @@ const PRIMARY_DOMAIN_KEYS = Object.freeze([
 
 const SCORE_REFERENCE_BY_GAME = Object.freeze({
   color_match: 6000,
-  color_memory: 50
+  color_memory: 50,
+  time: 100
 });
 
 const SOUND_GAME_TYPE_PREFIXES = Object.freeze(["sound_", "audio_"]);
@@ -96,6 +101,24 @@ const appState = {
     isComplete: false,
     summaryVisible: false,
     lastSpeedBonus: 0,
+    sessionSaved: false
+  },
+  time: {
+    round: 1,
+    totalRounds: 5,
+    score: 0,
+    scores: [],
+    targets: [],
+    players: [],
+    targetDuration: 0,
+    playerDuration: 0,
+    phase: "idle",
+    startTime: 0,
+    observeTimeoutId: null,
+    liveTimerId: null,
+    countdownTimeoutId: null,
+    isComplete: false,
+    summaryVisible: false,
     sessionSaved: false
   }
 };
@@ -211,7 +234,34 @@ const refs = {
   memAverageErrorInline: document.getElementById("memAverageErrorInline"),
   memSpeedBonus: document.getElementById("memSpeedBonus"),
   memSpeedInline: document.getElementById("memSpeedInline"),
-  memNextBtn: document.getElementById("memNextBtn")
+  memNextBtn: document.getElementById("memNextBtn"),
+  timeView: document.getElementById("timeView"),
+  timePauseBtn: document.getElementById("timePauseBtn"),
+  timeInstruction: document.getElementById("timeInstruction"),
+  timeRoundHud: document.getElementById("timeRoundHud"),
+  timeScoreHud: document.getElementById("timeScoreHud"),
+  timeTarget: document.getElementById("time-target"),
+  timePhaseText: document.getElementById("time-phase-text"),
+  timeLiveTimer: document.getElementById("time-live-timer"),
+  timeDurationBox: document.getElementById("timeDurationBox"),
+  timeTargetText: document.getElementById("timeTargetText"),
+  timeHoldBtn: document.getElementById("timeHoldBtn"),
+  timeHint: document.getElementById("timeHint"),
+  timeRoundResultOverlay: document.getElementById("timeRoundResultOverlay"),
+  timeRoundTitle: document.getElementById("timeRoundTitle"),
+  timeRoundTarget: document.getElementById("timeRoundTarget"),
+  timeRoundPlayer: document.getElementById("timeRoundPlayer"),
+  timeRoundDelta: document.getElementById("timeRoundDelta"),
+  timeRoundAccuracy: document.getElementById("timeRoundAccuracy"),
+  timeNextRoundBtn: document.getElementById("timeNextRoundBtn"),
+  timeResultModal: document.getElementById("timeResultModal"),
+  timeResultScore: document.getElementById("timeResultScore"),
+  timeResultAccuracy: document.getElementById("timeResultAccuracy"),
+  timeResultTotalDuration: document.getElementById("timeResultTotalDuration"),
+  timeResultRank: document.getElementById("timeResultRank"),
+  timeResultTop10: document.getElementById("timeResultTop10"),
+  timeResultPlayAgain: document.getElementById("timeResultPlayAgain"),
+  timeResultBack: document.getElementById("timeResultBack")
 };
 
 const navButtons = Array.from(document.querySelectorAll(".nav-btn"));
@@ -722,6 +772,17 @@ function updateStatsFilterButtonStates() {
     }
   }
 
+  const attentionBtn = document.getElementById("attentionDropdownBtn");
+  if (attentionBtn) {
+    const isActive = gameType === "category:attention" || gameType === "time";
+    setFilterBtnActiveState(attentionBtn, isActive);
+    const svg = attentionBtn.querySelector("svg");
+    if (svg) {
+      const isMenuOpen = !document.getElementById("attentionDropdownMenu")?.classList.contains("hidden");
+      svg.style.transform = isMenuOpen ? "rotate(180deg)" : "rotate(0deg)";
+    }
+  }
+
   statsDomainFilterButtons.forEach((button) => {
     const isActive = button.dataset.domainFilter === cognitiveDomain;
     setFilterBtnActiveState(button, isActive);
@@ -743,6 +804,9 @@ function getFilteredStatsHistory(items) {
         }
         if (cat === "sound") {
           return false; // No sound games yet
+        }
+        if (cat === "attention" && item.gameType !== "time") {
+          return false;
         }
       } else if (item.gameType !== gameType) {
         return false;
@@ -1172,7 +1236,8 @@ function bindStatsUi() {
   const dropdownConfigs = [
     { btnId: "visualDropdownBtn", menuId: "visualDropdownMenu" },
     { btnId: "memoryDropdownBtn", menuId: "memoryDropdownMenu" },
-    { btnId: "soundDropdownBtn", menuId: "soundDropdownMenu" }
+    { btnId: "soundDropdownBtn", menuId: "soundDropdownMenu" },
+    { btnId: "attentionDropdownBtn", menuId: "attentionDropdownMenu" }
   ];
 
   dropdownConfigs.forEach(({ btnId, menuId }) => {
@@ -1274,6 +1339,7 @@ function bindStatsUi() {
 function cancelUnfinishedSessionsForHome() {
   const cm = appState.colorMatch;
   const memory = appState.colorMemory;
+  const timeGame = appState.time;
 
   if (cm.isPlaying) {
     resetColorMatchGame();
@@ -1286,6 +1352,14 @@ function cancelUnfinishedSessionsForHome() {
 
   if (memoryUnfinished) {
     resetColorMemorySession();
+  }
+
+  const timeUnfinished = 
+    timeGame.phase !== "idle" && 
+    timeGame.phase !== "complete";
+
+  if (timeUnfinished) {
+    resetTimeGameSession();
   }
 }
 
@@ -1351,6 +1425,11 @@ function bindLaunchers() {
       if (button.dataset.launch === "colorMemory") {
         setView("colorMemoryView");
         startColorMemorySession();
+      }
+
+      if (button.dataset.launch === "time") {
+        setView("timeView");
+        startTimeGameSession();
       }
     });
   });
@@ -1720,6 +1799,33 @@ function setMemoryPanel(panel) {
   refs.memAdjustPanel.classList.toggle("hidden", panel !== "adjust");
   refs.memResultModal.classList.toggle("hidden", panel !== "result");
   refs.memResultCard.classList.toggle("hidden", panel !== "result");
+
+  const phaseInfo = document.getElementById("memPhaseHeaderInfo");
+  const phaseKicker = document.getElementById("memPhaseKicker");
+  const phaseTitle = document.getElementById("memPhaseTitle");
+
+  if (phaseInfo && phaseKicker && phaseTitle) {
+    const memory = appState.colorMemory;
+    if (panel === "memorize") {
+      phaseInfo.classList.remove("hidden");
+      if (memory.phase === "countdown") {
+        phaseKicker.textContent = "Get Ready";
+        phaseKicker.className = "text-[9px] font-bold text-red-400 uppercase tracking-wider animate-pulse";
+        phaseTitle.textContent = "Prepare Your Focus";
+      } else {
+        phaseKicker.textContent = "Phase 01: Retention";
+        phaseKicker.className = "text-[9px] font-bold text-yellow-500 uppercase tracking-wider";
+        phaseTitle.textContent = "Memorize the Hue";
+      }
+    } else if (panel === "adjust") {
+      phaseInfo.classList.remove("hidden");
+      phaseKicker.textContent = "Phase 02: Calibration";
+      phaseKicker.className = "text-[9px] font-bold text-blue-400 uppercase tracking-wider";
+      phaseTitle.textContent = "Match the Target Color";
+    } else {
+      phaseInfo.classList.add("hidden");
+    }
+  }
 }
 
 function setMemorySummaryScreenVisible(visible) {
@@ -1738,8 +1844,10 @@ function clearMemoryTimers() {
   const memory = appState.colorMemory;
   clearInterval(memory.memorizeIntervalId);
   clearTimeout(memory.memorizeTimeoutId);
+  clearTimeout(memory.countdownTimeoutId);
   memory.memorizeIntervalId = null;
   memory.memorizeTimeoutId = null;
+  memory.countdownTimeoutId = null;
 }
 
 function randomIntInclusive(min, max) {
@@ -1800,7 +1908,7 @@ function syncMemorySliders() {
 
   refs.memHueSlider.style.setProperty(
     "--track-bg",
-    "linear-gradient(180deg, #ff0000 0%, #ff00ff 16%, #0000ff 34%, #00ffff 50%, #00ff00 66%, #ffff00 84%, #ff0000 100%)"
+    "linear-gradient(180deg, #ff0000 0%, #ff00ff 17%, #0000ff 33%, #00ffff 50%, #00ff00 67%, #ffff00 83%, #ff0000 100%)"
   );
 
   const satTop = hsvToHex(memory.guess.h, 100, memory.guess.b);
@@ -1831,6 +1939,49 @@ function beginMemoryAdjustPhase() {
   memory.adjustStartedAt = performance.now();
   setMemoryPanel("adjust");
   syncMemorySliders();
+  playMemoryBeep(600, 400, "square");
+}
+
+function runMemoryCountdown(callback) {
+  const memory = appState.colorMemory;
+  memory.phase = "countdown";
+
+  // Hide skip button
+  refs.memSkipBtn.classList.add("hidden");
+
+  // Set target swatch to neutral dark color
+  refs.memTargetSwatch.style.background = "#191919";
+
+  // Trigger setMemoryPanel to update the top headers
+  setMemoryPanel("memorize");
+
+  // Display "Ready..." in purple
+  refs.memCountdown.textContent = "Ready...";
+  refs.memCountdown.className = "countdown absolute z-10 text-purple-500 font-extrabold text-6xl md:text-[8rem] drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)] select-none animate-pulse";
+  playMemoryBeep(300, 150, "sine");
+
+  memory.countdownTimeoutId = setTimeout(() => {
+    // Display "Set..." in yellow
+    refs.memCountdown.textContent = "Set...";
+    refs.memCountdown.className = "countdown absolute z-10 text-yellow-500 font-extrabold text-6xl md:text-[8rem] drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)] select-none animate-pulse";
+    playMemoryBeep(300, 150, "sine");
+
+    memory.countdownTimeoutId = setTimeout(() => {
+      // Display "Go!" in blue
+      refs.memCountdown.textContent = "Go!";
+      refs.memCountdown.className = "countdown absolute z-10 text-blue-500 font-extrabold text-7xl md:text-[9rem] drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)] select-none scale-110 transition-transform duration-100";
+      playMemoryBeep(600, 250, "square");
+
+      memory.countdownTimeoutId = setTimeout(() => {
+        // Reset countdown style to default white
+        refs.memCountdown.className = "countdown absolute z-10 text-white font-extrabold text-6xl md:text-[8rem] drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)] select-none";
+        // Show skip button
+        refs.memSkipBtn.classList.remove("hidden");
+        
+        callback();
+      }, 800);
+    }, 1000);
+  }, 1000);
 }
 
 function beginMemoryMemorizePhase() {
@@ -1845,21 +1996,29 @@ function beginMemoryMemorizePhase() {
   memory.isComplete = false;
 
   refs.memTargetSwatch.style.background = hsvToHex(memory.target.h, memory.target.s, memory.target.b);
-  refs.memCountdown.textContent = "5.00";
+  refs.memCountdown.textContent = "500 ms";
+  refs.memSkipBtn.classList.remove("hidden");
   setMemoryPanel("memorize");
   syncMemorySliders();
   renderMemoryHud();
 
+  let ticksCount = 0;
   const phaseStartedAt = performance.now();
   memory.memorizeIntervalId = setInterval(() => {
     const elapsed = (performance.now() - phaseStartedAt) / 1000;
     const remaining = Math.max(0, 5 - elapsed);
-    refs.memCountdown.textContent = remaining.toFixed(2);
+    refs.memCountdown.textContent = `${Math.round(remaining * 100)} ms`;
 
-    if (remaining <= 0.02) {
+    ticksCount += 1;
+    // Play a very soft clock click exactly every 1.0 seconds (every 10 ticks)
+    if (ticksCount % 10 === 0) {
+      playTick();
+    }
+
+    if (remaining <= 0.05) {
       beginMemoryAdjustPhase();
     }
-  }, 40);
+  }, 100);
 
   memory.memorizeTimeoutId = setTimeout(beginMemoryAdjustPhase, 5000);
 }
@@ -2080,7 +2239,7 @@ function resetColorMemorySession() {
   memory.lastSpeedBonus = 0;
   memory.sessionSaved = false;
 
-  refs.memCountdown.textContent = "5.00";
+  refs.memCountdown.textContent = "500 ms";
   refs.memTargetSwatch.style.background = hsvToHex(memory.target.h, memory.target.s, memory.target.b);
   setMemoryPanel("memorize");
   setMemorySummaryScreenVisible(false);
@@ -2102,8 +2261,13 @@ function startColorMemorySession() {
   memory.lastSpeedBonus = 0;
   memory.sessionSaved = false;
 
+  // Initialize audio context
+  initTimeAudio();
+
   renderMemoryHud();
-  beginMemoryMemorizePhase();
+  runMemoryCountdown(() => {
+    beginMemoryMemorizePhase();
+  });
 }
 
 function confirmColorMemorySelection() {
@@ -2181,7 +2345,9 @@ function nextColorMemoryRound() {
 
   memory.round += 1;
   renderMemoryHud();
-  beginMemoryMemorizePhase();
+  runMemoryCountdown(() => {
+    beginMemoryMemorizePhase();
+  });
 }
 
 function bindColorMemoryEvents() {
@@ -2200,6 +2366,494 @@ function bindColorMemoryEvents() {
   });
 }
 
+// ==========================================
+// ⏱️ TIME ESTIMATION GAME MODULE (ATTENTION)
+// ==========================================
+
+let timeAudioCtx = null;
+function initTimeAudio() {
+  try {
+    if (!timeAudioCtx) {
+      timeAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (timeAudioCtx.state === "suspended") {
+      timeAudioCtx.resume().catch((err) => {
+        console.warn("Failed to resume time audio context:", err);
+      });
+    }
+  } catch (e) {
+    console.error("AudioContext initialization failed:", e);
+  }
+}
+
+function playTimeBeep(frequency, durationMs) {
+  try {
+    initTimeAudio();
+    if (!timeAudioCtx) return;
+    
+    const osc = timeAudioCtx.createOscillator();
+    const gainNode = timeAudioCtx.createGain();
+    
+    osc.type = "sine";
+    osc.frequency.value = frequency;
+    
+    osc.connect(gainNode);
+    gainNode.connect(timeAudioCtx.destination);
+    
+    const now = timeAudioCtx.currentTime + 0.005;
+    const durationSec = durationMs / 1000;
+    
+    // Increased gain to 0.25 (clear, mid-range volume)
+    gainNode.gain.setValueAtTime(0.25, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + durationSec);
+    
+    osc.start(now);
+    osc.stop(now + durationSec + 0.05);
+  } catch (e) {
+    console.error("Audio playback error:", e);
+  }
+}
+
+function playMemoryBeep(frequency, durationMs, type = "sine") {
+  try {
+    initTimeAudio();
+    if (!timeAudioCtx) return;
+    
+    const osc = timeAudioCtx.createOscillator();
+    const gainNode = timeAudioCtx.createGain();
+    
+    osc.type = type;
+    osc.frequency.value = frequency;
+    
+    osc.connect(gainNode);
+    gainNode.connect(timeAudioCtx.destination);
+    
+    const now = timeAudioCtx.currentTime + 0.005;
+    const durationSec = durationMs / 1000;
+    
+    // Increased gain to 0.25 (clear, mid-range volume)
+    gainNode.gain.setValueAtTime(0.25, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + durationSec);
+    
+    osc.start(now);
+    osc.stop(now + durationSec + 0.05);
+  } catch (e) {
+    console.error("Audio playback error:", e);
+  }
+}
+
+function playTick() {
+  try {
+    initTimeAudio();
+    if (!timeAudioCtx) return;
+    
+    const osc = timeAudioCtx.createOscillator();
+    const gain = timeAudioCtx.createGain();
+    
+    // Smooth sine wave for clean, high-frequency, transient-only clock needle click sounds
+    osc.type = "sine";
+    osc.frequency.value = 550; // Reduced to 550Hz for a much softer, warmer mechanical wall clock tick
+    
+    osc.connect(gain);
+    gain.connect(timeAudioCtx.destination);
+    
+    const now = timeAudioCtx.currentTime + 0.002;
+    const duration = 0.04; // 40ms decay for organic, comfortable wall clock click
+    
+    // Tuned gain to 0.2 for comfortable focus while maintaining perfect audible clarity
+    // Uses linear ramp to 0.0 for stable Web Audio API thread scheduling and clear release
+    gain.gain.setValueAtTime(0.2, now);
+    gain.gain.linearRampToValueAtTime(0.0, now + duration);
+    
+    osc.start(now);
+    osc.stop(now + duration + 0.005);
+  } catch (e) {
+    console.error("Tick audio error:", e);
+  }
+}
+
+function calculateTimeAccuracy(target, player) {
+  const errorRatio = Math.abs(target - player) / target;
+  const accuracy = 100 - (errorRatio * 150);
+  return Math.max(0, accuracy);
+}
+
+function resetTimeGameSession() {
+  const t = appState.time;
+  if (t.observeTimeoutId) {
+    clearTimeout(t.observeTimeoutId);
+    t.observeTimeoutId = null;
+  }
+  if (t.countdownTimeoutId) {
+    clearTimeout(t.countdownTimeoutId);
+    t.countdownTimeoutId = null;
+  }
+  if (t.liveTimerId) {
+    cancelAnimationFrame(t.liveTimerId);
+    t.liveTimerId = null;
+  }
+  t.round = 1;
+  t.score = 0;
+  t.scores = [];
+  t.targets = [];
+  t.players = [];
+  t.targetDuration = 0;
+  t.playerDuration = 0;
+  t.phase = "idle";
+  t.startTime = 0;
+  t.isComplete = false;
+  t.summaryVisible = false;
+  t.sessionSaved = false;
+
+  // Reset UI elements
+  refs.timeRoundHud.textContent = "1/5";
+  refs.timeScoreHud.textContent = "0.00";
+  
+  refs.timeTarget.className = "w-36 h-36 rounded-full border-4 border-[#2D2D2D] bg-[#191919] flex flex-col items-center justify-center transition-all duration-200 shadow-[0_0_20px_rgba(0,0,0,0.3)] cursor-pointer select-none";
+  refs.timePhaseText.textContent = "Observe";
+  refs.timePhaseText.className = "text-lg font-extrabold uppercase tracking-widest text-notion-muted h-8 flex items-center justify-center";
+  
+  refs.timeLiveTimer.classList.add("hidden");
+  refs.timeLiveTimer.textContent = "0.00s";
+  
+  refs.timeDurationBox.classList.add("hidden");
+  refs.timeTargetText.textContent = "0.00s";
+  
+  refs.timeHoldBtn.textContent = "Hold to Start";
+  refs.timeHoldBtn.disabled = true;
+  refs.timeHint.textContent = "Observe the circle lighting up to memorize the target duration.";
+  
+  refs.timeRoundResultOverlay.classList.add("hidden");
+  refs.timeResultModal.classList.add("hidden");
+}
+
+function runTimeCountdown(callback) {
+  const t = appState.time;
+  t.phase = "countdown";
+  
+  // Set UI state for countdown
+  refs.timeInstruction.textContent = "Prepare your attention...";
+  refs.timePhaseText.textContent = "Ready...";
+  refs.timePhaseText.className = "text-lg font-extrabold uppercase tracking-widest text-purple-500 h-8 flex items-center justify-center animate-pulse";
+  refs.timeTarget.className = "w-36 h-36 rounded-full border-4 border-[#3E3E3E] bg-[#191919] flex flex-col items-center justify-center transition-all duration-200 shadow-[0_0_20px_rgba(0,0,0,0.3)] cursor-not-allowed select-none";
+  refs.timeLiveTimer.classList.add("hidden");
+  refs.timeHoldBtn.textContent = "Hold to Start";
+  refs.timeHoldBtn.disabled = true;
+  refs.timeDurationBox.classList.add("hidden");
+  
+  playTimeBeep(300, 150);
+
+  t.countdownTimeoutId = setTimeout(() => {
+    refs.timePhaseText.textContent = "Set...";
+    refs.timePhaseText.className = "text-lg font-extrabold uppercase tracking-widest text-yellow-500 h-8 flex items-center justify-center animate-pulse";
+    playTimeBeep(300, 150);
+
+    t.countdownTimeoutId = setTimeout(() => {
+      refs.timePhaseText.textContent = "Go!";
+      refs.timePhaseText.className = "text-lg font-extrabold uppercase tracking-widest text-blue-500 h-8 flex items-center justify-center scale-110 transition-transform duration-100";
+      playTimeBeep(600, 250);
+
+      t.countdownTimeoutId = setTimeout(() => {
+        refs.timePhaseText.className = "text-lg font-extrabold uppercase tracking-widest text-[#FBBF24] h-8 flex items-center justify-center";
+        callback();
+      }, 800);
+    }, 1000);
+  }, 1000);
+}
+
+function startTimeGameSession() {
+  resetTimeGameSession();
+  renderTimeHud();
+  runTimeCountdown(() => {
+    beginTimeObservePhase();
+  });
+}
+
+function renderTimeHud() {
+  const t = appState.time;
+  refs.timeRoundHud.textContent = `${t.round}/${t.totalRounds}`;
+  const currentAvg = t.scores.length > 0 
+    ? t.scores.reduce((a, b) => a + b, 0) / t.scores.length 
+    : 0;
+  refs.timeScoreHud.textContent = currentAvg.toFixed(2);
+}
+
+function beginTimeObservePhase() {
+  const t = appState.time;
+  t.phase = "observe";
+  t.startTime = 0;
+  t.playerDuration = 0;
+  
+  // Random target duration between 800ms and 4500ms
+  t.targetDuration = Math.floor(800 + Math.random() * 3700);
+  t.targets.push(t.targetDuration);
+
+  // Set UI for observation
+  refs.timeInstruction.textContent = "Observe the target duration!";
+  refs.timePhaseText.textContent = "Observe...";
+  refs.timePhaseText.className = "text-lg font-extrabold uppercase tracking-widest text-blue-400 h-8 flex items-center justify-center";
+  
+  // Apply visual pulsing keyframe class!
+  refs.timeTarget.className = "w-36 h-36 rounded-full border-4 flex flex-col items-center justify-center transition-all duration-200 cursor-not-allowed select-none animate-time-pulse";
+  
+  // Hide numerical target display to force memory recall!
+  refs.timeDurationBox.classList.add("hidden");
+  refs.timeLiveTimer.classList.add("hidden");
+  
+  refs.timeHoldBtn.textContent = "Hold to Start";
+  refs.timeHoldBtn.disabled = true;
+  refs.timeHint.textContent = "Observe the pulsing circle to absorb the interval duration without looking at numbers.";
+  
+  refs.timeRoundResultOverlay.classList.add("hidden");
+
+  // Keep pulsing for targetDuration, then transition to recreate phase
+  t.observeTimeoutId = setTimeout(() => {
+    beginTimeRecreatePhase();
+  }, t.targetDuration);
+}
+
+function beginTimeRecreatePhase() {
+  const t = appState.time;
+  t.phase = "recreate";
+  
+  if (t.observeTimeoutId) {
+    clearTimeout(t.observeTimeoutId);
+    t.observeTimeoutId = null;
+  }
+
+  // Set UI for user recreation
+  refs.timeInstruction.textContent = "Your turn. Press and hold!";
+  refs.timePhaseText.textContent = "your turn – hold to match";
+  refs.timePhaseText.className = "text-sm font-semibold uppercase tracking-widest text-yellow-500 h-8 flex items-center justify-center";
+  refs.timeTarget.className = "w-36 h-36 rounded-full border-4 border-[#3B82F6] bg-[#191919] flex flex-col items-center justify-center transition-all duration-200 shadow-[0_0_20px_rgba(59,130,246,0.3)] cursor-pointer select-none";
+  
+  refs.timeLiveTimer.classList.add("hidden");
+  refs.timeLiveTimer.textContent = "0.00s";
+  
+  refs.timeHoldBtn.textContent = "Press & Hold";
+  refs.timeHoldBtn.disabled = false;
+  refs.timeHint.textContent = "Your turn. Press and hold the button (or Spacebar, or the ring itself) for exactly the target duration!";
+}
+
+let isHoldingTime = false;
+
+function updateLiveTimerTicks() {
+  const t = appState.time;
+  if (!isHoldingTime || t.phase !== "recreate") return;
+  
+  const elapsed = (performance.now() - t.startTime) / 1000;
+  refs.timeLiveTimer.textContent = `${elapsed.toFixed(2)}s`;
+  
+  t.liveTimerId = requestAnimationFrame(updateLiveTimerTicks);
+}
+
+function handleTimeHoldStart(e) {
+  const t = appState.time;
+  if (t.phase !== "recreate" || isHoldingTime) return;
+  if (e) e.preventDefault();
+
+  isHoldingTime = true;
+  t.startTime = performance.now();
+
+  // Update UI to holding state
+  refs.timePhaseText.textContent = "Holding...";
+  refs.timePhaseText.className = "text-sm font-semibold uppercase tracking-widest text-yellow-500 h-8 flex items-center justify-center";
+  
+  // Clean bright solid color
+  refs.timeTarget.className = "w-36 h-36 rounded-full border-4 flex flex-col items-center justify-center transition-all duration-150 cursor-pointer select-none scale-105 animate-time-pulse";
+  
+  refs.timeLiveTimer.classList.remove("hidden");
+  refs.timeLiveTimer.textContent = "0.00s";
+  
+  refs.timeHoldBtn.textContent = "Release!";
+  refs.timeHoldBtn.classList.add("active");
+
+  // Start real-time timer frame ticks
+  t.liveTimerId = requestAnimationFrame(updateLiveTimerTicks);
+}
+
+function handleTimeHoldEnd(e) {
+  const t = appState.time;
+  if (t.phase !== "recreate" || !isHoldingTime) return;
+  if (e) e.preventDefault();
+
+  isHoldingTime = false;
+  
+  // Cancel ticking frame
+  if (t.liveTimerId) {
+    cancelAnimationFrame(t.liveTimerId);
+    t.liveTimerId = null;
+  }
+
+  const elapsed = performance.now() - t.startTime;
+  t.playerDuration = elapsed;
+  t.players.push(elapsed);
+
+  // Turn off hold state
+  refs.timeTarget.className = "w-36 h-36 rounded-full border-4 border-[#2D2D2D] bg-[#191919] flex flex-col items-center justify-center transition-all duration-200 shadow-[0_0_20px_rgba(0,0,0,0.3)] cursor-pointer select-none";
+  refs.timeHoldBtn.textContent = "Hold to Start";
+  refs.timeHoldBtn.disabled = true;
+  refs.timeHoldBtn.classList.remove("active");
+
+  const roundAccuracy = calculateTimeAccuracy(t.targetDuration, t.playerDuration);
+  t.scores.push(roundAccuracy);
+
+  renderTimeHud();
+  showTimeRoundResult(roundAccuracy);
+}
+
+function showTimeRoundResult(accuracy) {
+  const t = appState.time;
+  t.phase = "result";
+
+  // Light up ring with success color if accuracy is high
+  if (accuracy >= 80) {
+    refs.timeTarget.className = "w-36 h-36 rounded-full border-4 border-[#2D2D2D] bg-[#191919] flex flex-col items-center justify-center transition-all duration-200 shadow-[0_0_20px_rgba(0,0,0,0.3)] cursor-pointer select-none time-ring-success";
+    refs.timePhaseText.textContent = "Great!";
+    refs.timePhaseText.className = "text-sm font-bold uppercase tracking-widest text-emerald-400 h-8 flex items-center justify-center";
+  } else {
+    refs.timePhaseText.textContent = "Done";
+    refs.timePhaseText.className = "text-sm font-bold uppercase tracking-widest text-notion-muted h-8 flex items-center justify-center";
+  }
+
+  // Populate round result overlay
+  refs.timeRoundTitle.textContent = `Round ${t.round}/${t.totalRounds}`;
+  refs.timeRoundTarget.textContent = `${(t.targetDuration / 1000).toFixed(2)}s`;
+  refs.timeRoundPlayer.textContent = `${(t.playerDuration / 1000).toFixed(2)}s`;
+  
+  const delta = (t.playerDuration - t.targetDuration) / 1000;
+  const deltaSign = delta >= 0 ? "+" : "";
+  refs.timeRoundDelta.textContent = `${deltaSign}${delta.toFixed(2)}s`;
+  refs.timeRoundDelta.className = delta >= 0 ? "text-[#C04D4D] font-bold" : "text-[#2F6C8F] font-bold";
+  
+  refs.timeRoundAccuracy.textContent = `${accuracy.toFixed(1)}%`;
+  refs.timeRoundAccuracy.className = accuracy >= 80 ? "text-emerald-400 font-bold" : (accuracy >= 50 ? "text-yellow-500 font-bold" : "text-red-400 font-bold");
+
+  refs.timeRoundResultOverlay.classList.remove("hidden");
+}
+
+function nextTimeRound() {
+  const t = appState.time;
+  if (t.phase !== "result") return;
+
+  refs.timeRoundResultOverlay.classList.add("hidden");
+
+  if (t.round < t.totalRounds) {
+    t.round += 1;
+    renderTimeHud();
+    runTimeCountdown(() => {
+      beginTimeObservePhase();
+    });
+  } else {
+    endTimeGameSession();
+  }
+}
+
+function endTimeGameSession() {
+  const t = appState.time;
+  t.phase = "complete";
+  t.isComplete = true;
+
+  const finalScore = t.scores.reduce((a, b) => a + b, 0) / t.totalRounds;
+  refs.timeResultScore.textContent = finalScore.toFixed(1);
+  refs.timeResultAccuracy.textContent = `${finalScore.toFixed(1)}%`;
+  
+  const totalPlaySeconds = t.targets.reduce((a, b) => a + b, 0) / 1000;
+  refs.timeResultTotalDuration.textContent = `${Math.round(totalPlaySeconds)}s`;
+
+  // Customize tagline factually based on performance
+  const tagline = refs.timeResultModal.querySelector(".cm-result-tagline");
+  if (tagline) {
+    if (finalScore >= 90) tagline.textContent = "Elite interval timing. Solid sustained attention.";
+    else if (finalScore >= 75) tagline.textContent = "Sharp temporal precision and strong rhythm.";
+    else if (finalScore >= 50) tagline.textContent = "Balanced focus. Tighter timing will boost this.";
+    else tagline.textContent = "Warm-up complete. Re-enter and chase the rhythm.";
+  }
+
+  // Draw local Top 10 Highscores list
+  renderResultTopTen("time", finalScore, refs.timeResultTop10, refs.timeResultRank);
+
+  refs.timeResultModal.classList.remove("hidden");
+
+  // Save session to SQLite database!
+  if (!t.sessionSaved) {
+    t.sessionSaved = true;
+    void saveSessionToDatabase({
+      gameType: "time",
+      cognitiveDomain: "attention",
+      score: finalScore,
+      accuracy: finalScore,
+      peakMultiplier: null,
+      durationSeconds: Math.round(totalPlaySeconds),
+      roundCount: t.totalRounds,
+      detail: {
+        targets: t.targets,
+        players: t.players,
+        scores: t.scores
+      }
+    }).then(() => {
+      loadStatsOverview();
+    });
+  }
+}
+
+function bindTimeEvents() {
+  // Navigation back / pause
+  refs.timePauseBtn.addEventListener("click", () => {
+    setView("dashboardView");
+    resetTimeGameSession();
+  });
+
+  // Next round / Result modal actions
+  refs.timeNextRoundBtn.addEventListener("click", nextTimeRound);
+  refs.timeResultPlayAgain.addEventListener("click", startTimeGameSession);
+  refs.timeResultBack.addEventListener("click", () => {
+    setView("dashboardView");
+    resetTimeGameSession();
+  });
+
+  // Hold trigger mouse and touch bindings (for hold button)
+  refs.timeHoldBtn.addEventListener("mousedown", handleTimeHoldStart);
+  refs.timeHoldBtn.addEventListener("mouseup", handleTimeHoldEnd);
+  refs.timeHoldBtn.addEventListener("mouseleave", handleTimeHoldEnd);
+  
+  refs.timeHoldBtn.addEventListener("touchstart", (e) => {
+    handleTimeHoldStart(e);
+  }, { passive: false });
+  refs.timeHoldBtn.addEventListener("touchend", (e) => {
+    handleTimeHoldEnd(e);
+  }, { passive: false });
+
+  // Hold trigger mouse and touch bindings (for the central ring itself!)
+  refs.timeTarget.addEventListener("mousedown", handleTimeHoldStart);
+  refs.timeTarget.addEventListener("mouseup", handleTimeHoldEnd);
+  refs.timeTarget.addEventListener("mouseleave", handleTimeHoldEnd);
+
+  refs.timeTarget.addEventListener("touchstart", (e) => {
+    handleTimeHoldStart(e);
+  }, { passive: false });
+  refs.timeTarget.addEventListener("touchend", (e) => {
+    handleTimeHoldEnd(e);
+  }, { passive: false });
+
+  // Spacebar hold support for optimal ergonomics
+  window.addEventListener("keydown", (e) => {
+    if (appState.activeView !== "timeView") return;
+    if (e.key === " " || e.code === "Space") {
+      e.preventDefault();
+      handleTimeHoldStart();
+    }
+  });
+
+  window.addEventListener("keyup", (e) => {
+    if (appState.activeView !== "timeView") return;
+    if (e.key === " " || e.code === "Space") {
+      e.preventDefault();
+      handleTimeHoldEnd();
+    }
+  });
+}
+
 function startTopClockTicker() {
   setInterval(() => {
     if (appState.topClockSeconds > 0) {
@@ -2210,11 +2864,17 @@ function startTopClockTicker() {
 }
 
 async function init() {
+  // Resume or pre-initialize audio context on first click to satisfy Chrome Autoplay Policy
+  window.addEventListener("click", () => {
+    initTimeAudio();
+  }, { once: true });
+
   bindStatsUi();
   bindNavigation();
   bindLaunchers();
   bindColorMatchEvents();
   bindColorMemoryEvents();
+  bindTimeEvents();
 
   generateColorMatchRound();
   renderColorMatchHud();

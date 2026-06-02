@@ -62,6 +62,11 @@
         <path d="M12 18v3" />
         <path d="M16 18v3" />
       </symbol>
+      <symbol id="icon-stopwatch" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2" fill="none" />
+        <path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+        <path d="M12 2v2" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+      </symbol>
     </svg>
 
     <div class="app-layout max-w-6xl mx-auto px-6 py-12 flex flex-col md:grid md:grid-cols-[240px_1fr] gap-8">
@@ -220,27 +225,59 @@
                 </article>
               </div>
 
-              <!-- Right Column: Sound Panel -->
-              <article class="category-panel bg-notion-blue rounded-lg border border-notion-border p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
-                <div class="category-title flex items-center gap-3 pb-2 border-b border-notion-border">
-                  <span class="category-icon sound w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-[#2F6C8F]" aria-hidden="true">
-                    <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#icon-sound"></use></svg>
-                  </span>
-                  <div>
-                    <h2 class="text-sm font-bold text-white">Sound Tests</h2>
-                    <p class="text-[11px] text-[#E0E0E0]/80">Audio and rhythm tracks</p>
+              <!-- Right Column: Sound & Attention Panel -->
+              <div class="flex flex-col gap-6">
+                <!-- Sound Panel -->
+                <article class="category-panel bg-notion-blue rounded-lg border border-notion-border p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                  <div class="category-title flex items-center gap-3 pb-2 border-b border-notion-border">
+                    <span class="category-icon sound w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-[#2F6C8F]" aria-hidden="true">
+                      <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#icon-sound"></use></svg>
+                    </span>
+                    <div>
+                      <h2 class="text-sm font-bold text-white">Sound Tests</h2>
+                      <p class="text-[11px] text-[#E0E0E0]/80">Audio and rhythm tracks</p>
+                    </div>
                   </div>
-                </div>
 
-                <div class="sound-tag-grid flex flex-wrap gap-1.5">
-                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pitch</span>
-                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Sequence</span>
-                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Rhythm</span>
-                  <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pattern</span>
-                </div>
+                  <div class="sound-tag-grid flex flex-wrap gap-1.5">
+                    <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pitch</span>
+                    <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Sequence</span>
+                    <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Rhythm</span>
+                    <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pattern</span>
+                  </div>
 
-                <button class="soft-btn w-full py-2 bg-[#2F2F2F] hover:bg-[#3A3A3A] text-xs font-semibold text-notion-text border border-[#3E3E3E] rounded transition-colors cursor-pointer" type="button" data-launch="colorMemory">Try Sample Drill</button>
-              </article>
+                  <button class="soft-btn w-full py-2 bg-[#2F2F2F] hover:bg-[#3A3A3A] text-xs font-semibold text-notion-text border border-[#3E3E3E] rounded transition-colors cursor-pointer" type="button" data-launch="colorMemory">Try Sample Drill</button>
+                </article>
+
+                <!-- Attention Tests Section (Callout Brown Background) -->
+                <article class="category-panel bg-notion-brown rounded-lg border border-[#5A4A2B] p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)]">
+                  <div class="category-head flex flex-row items-center gap-3">
+                    <span class="category-icon attention w-8 h-8 rounded bg-notion-bg flex items-center justify-center border border-notion-border text-yellow-500" aria-hidden="true">
+                      <svg class="w-5 h-5" viewBox="0 0 24 24"><use href="#icon-stopwatch"></use></svg>
+                    </span>
+                    <div>
+                      <h2 class="text-base font-bold text-white leading-tight">Attention Tests</h2>
+                      <p class="text-xs text-[#E0E0E0]/80">Focus and interval timing drills</p>
+                    </div>
+                  </div>
+
+                  <div class="launcher-grid flex flex-col gap-2">
+                    <!-- Time Button -->
+                    <button id="mode-time-btn" class="launcher-card w-full flex items-center justify-between p-3.5 rounded-md bg-[#2F2F2F] border border-[#3E3E3E] hover:bg-[#3A3A3A] transition-colors cursor-pointer text-left shadow-[0_1px_2px_rgba(0,0,0,0.01)]" type="button" data-launch="time">
+                      <div class="flex items-center gap-3.5">
+                        <span class="launcher-icon w-8 h-8 rounded bg-notion-brown flex items-center justify-center text-yellow-500" aria-hidden="true">
+                          <svg class="w-4 h-4" viewBox="0 0 24 24"><use href="#icon-stopwatch"></use></svg>
+                        </span>
+                        <div class="launcher-copy">
+                          <h3 class="text-sm font-semibold text-notion-text">Time</h3>
+                          <p class="text-xs text-notion-muted">Recreate exactly 5 target durations.</p>
+                        </div>
+                      </div>
+                      <span class="launcher-cta text-xs font-semibold text-notion-muted">Play →</span>
+                    </button>
+                  </div>
+                </article>
+              </div>
             </div>
 
             <!-- Dashboard Foot: Stats Summary and History -->
@@ -496,6 +533,20 @@
                     </div>
                   </div>
                 </div>
+
+                <!-- Attention Games Dropdown -->
+                <div class="relative inline-block text-left" id="attentionDropdownContainer">
+                  <button id="attentionDropdownBtn" class="stats-filter-btn flex items-center gap-1.5 px-2.5 py-1 bg-transparent hover:bg-[#2D2D2D] border border-transparent rounded text-xs font-semibold text-notion-muted cursor-pointer transition-colors" type="button">
+                    Attention Games
+                    <svg class="w-2.5 h-2.5 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path></svg>
+                  </button>
+                  <div id="attentionDropdownMenu" class="hidden absolute left-0 mt-1 w-44 rounded bg-[#222222] border border-[#3E3E3E] shadow-xl z-50 transition-all duration-150">
+                    <div class="py-1 flex flex-col" role="menu" aria-orientation="vertical">
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="category:attention" role="menuitem">All Attention Games</button>
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="time" role="menuitem">Time Estimation</button>
+                    </div>
+                  </div>
+                </div>
               </div>
 
               <div class="stats-empty border border-dashed border-notion-border rounded p-4 text-center text-xs text-notion-muted font-medium" id="statsEmpty">No session history yet. Play a game to start building data.</div>
@@ -542,28 +593,32 @@
 
             <section class="memory-session flex flex-col gap-6">
               <div class="memory-top bg-notion-bg border border-notion-border rounded-lg p-5 flex items-center justify-between shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
-                <div>
-                  <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">HSB Retention</p>
-                  <h2 id="memRoundTitle" class="text-lg font-bold text-notion-text">Round 1/5</h2>
+                <div class="flex items-center gap-4">
+                  <div>
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">HSB Retention</p>
+                    <h2 id="memRoundTitle" class="text-lg font-bold text-notion-text">Round 1/5</h2>
+                  </div>
+                  <div id="memPhaseHeaderInfo" class="border-l border-[#333333] pl-4 flex flex-col justify-center hidden">
+                    <p id="memPhaseKicker" class="text-[9px] font-bold text-yellow-500 uppercase tracking-wider">Phase 01: Retention</p>
+                    <h3 id="memPhaseTitle" class="text-sm font-semibold text-notion-text leading-none mt-1">Memorize the Hue</h3>
+                  </div>
                 </div>
                 <div class="memory-top-actions flex items-center gap-4">
                   <div class="segmented-bars flex gap-1" id="memProgress"></div>
                   <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="memStartBtn" type="button">Start Session</button>
                 </div>
               </div>
-
+ 
               <!-- Phase 1: Memorization Stage -->
               <div class="memory-memorize bg-notion-bg border border-notion-border rounded-lg p-8 flex flex-col items-center gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]" id="memMemorizePanel">
-                <h3 class="text-xl font-bold text-notion-text">Memorize the Hue</h3>
-                <p class="phase-label text-[10px] font-bold text-notion-muted tracking-wider uppercase">Phase 01: Retention</p>
-                <div class="target-color w-40 h-40 rounded-lg border border-notion-border" id="memTargetSwatch"></div>
-                <p class="countdown text-3xl font-extrabold text-[#C04D4D]" id="memCountdown">5.00</p>
-                <p class="countdown-caption text-[10px] text-notion-muted font-medium tracking-wide">Seconds to remember</p>
+                <div class="target-color w-full min-h-[350px] md:min-h-[450px] rounded-xl border border-notion-border relative flex items-center justify-center transition-all duration-300" id="memTargetSwatch">
+                  <p class="countdown absolute z-10 text-white font-extrabold text-6xl md:text-[8rem] drop-shadow-[0_4px_6px_rgba(0,0,0,0.6)] select-none" id="memCountdown">500 ms</p>
+                </div>
                 <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors mt-2" id="memSkipBtn" type="button">Skip to Match</button>
               </div>
 
               <!-- Phase 2: Calibration Stage -->
-              <div class="memory-adjust grid grid-cols-1 lg:grid-cols-[260px_1fr] gap-6 hidden" id="memAdjustPanel">
+              <div class="memory-adjust grid grid-cols-1 lg:grid-cols-[340px_1fr] gap-6 hidden" id="memAdjustPanel">
                 <article class="slider-panel bg-notion-bg border border-notion-border rounded-lg p-5 flex flex-col gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                   <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Adjust HSB</p>
                   <div class="slider-columns flex justify-around">
@@ -600,7 +655,7 @@
 
                 <article class="preview-panel bg-notion-bg border border-notion-border rounded-lg p-5 flex flex-col justify-between gap-4 shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
                   <p class="hex-pill px-3 py-1 bg-notion-bg border border-notion-border rounded text-xs font-semibold">Current HEX <strong id="memCurrentHex" class="font-bold text-notion-text">#556B2F</strong></p>
-                  <div class="preview-color w-full h-40 rounded-lg border border-notion-border" id="memPreview"></div>
+                  <div class="preview-color w-full flex-1 min-h-[250px] rounded-lg border border-notion-border" id="memPreview"></div>
                   <div class="flex flex-col gap-2">
                     <button class="prime-btn w-full py-2.5 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-sm font-semibold rounded cursor-pointer transition-colors" id="memConfirmBtn" type="button">Confirm Selection</button>
                     <p class="preview-hint text-[10px] text-notion-muted">Adjust sliders to match the memorized shade.</p>
@@ -758,6 +813,103 @@
                 <div class="overlay-actions flex justify-center gap-3 border-t border-notion-border pt-4">
                   <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="sqResultPlayAgain" type="button">Play Again</button>
                   <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="sqResultBack" type="button">Back to Dashboard</button>
+                </div>
+              </article>
+            </section>
+          </section>
+
+          <!-- ⏱️ VIEW: TIME ESTIMATION (ATTENTION) -->
+          <section class="view flex flex-col gap-6" id="timeView">
+            <header class="mode-header flex items-center justify-between pb-3 border-b border-notion-border">
+              <button class="soft-btn px-3 py-1.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold text-notion-text rounded cursor-pointer transition-colors" type="button" data-back="dashboardView" id="timePauseBtn">Pause</button>
+              <p class="mode-label text-sm text-notion-muted">BrainDash <strong class="text-notion-text">Time Estimation</strong></p>
+              <div class="mode-hud flex items-center gap-4 text-xs font-medium text-notion-muted">
+                <span>Round: <strong id="timeRoundHud" class="text-notion-text">1/5</strong></span>
+                <span>Score: <strong id="timeScoreHud" class="text-notion-text">0.00</strong></span>
+              </div>
+            </header>
+
+            <section class="time-stage bg-notion-bg rounded-lg border border-notion-border p-8 flex flex-col items-center gap-6 shadow-[0_1px_3px_rgba(0,0,0,0.02)] relative">
+              <h2 class="text-xl font-bold text-notion-text" id="timeInstruction">Observe the target duration!</h2>
+              <div class="accent-rule w-12 h-1 bg-[#2D2D2D] rounded-full" aria-hidden="true"></div>
+
+              <!-- Central Circular Ring Display -->
+              <div class="flex flex-col items-center gap-6 my-6">
+                <!-- Phase Text for countdown announcements -->
+                <p id="time-phase-text" class="text-lg font-extrabold uppercase tracking-widest text-[#FBBF24] h-8 flex items-center justify-center">Ready...</p>
+
+                <!-- Observer Target Circle -->
+                <div id="time-target" class="w-36 h-36 rounded-full border-4 border-[#2D2D2D] bg-[#191919] flex flex-col items-center justify-center transition-all duration-200 shadow-[0_0_20px_rgba(0,0,0,0.3)] cursor-pointer select-none relative">
+                  <!-- Timer Display during Hold -->
+                  <strong id="time-live-timer" class="text-3xl font-extrabold text-white tracking-tight hidden">0.00s</strong>
+                </div>
+
+                <div id="timeDurationBox" class="text-center mt-2 hidden">
+                  <p class="text-[10px] font-bold text-notion-muted uppercase tracking-wider">Target Time</p>
+                  <strong id="timeTargetText" class="text-4xl font-extrabold text-white tracking-tight">0.00s</strong>
+                </div>
+              </div>
+
+              <!-- Hold Action Trigger Button -->
+              <button id="timeHoldBtn" class="prime-btn px-10 py-4 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-base font-bold rounded-lg cursor-pointer transition-all active:scale-95 select-none disabled:opacity-40 disabled:cursor-not-allowed" type="button" disabled>
+                Hold to Start
+              </button>
+
+              <p class="time-hint text-xs text-notion-muted font-medium text-center max-w-sm leading-relaxed" id="timeHint">Observe the circle lighting up to memorize the target duration.</p>
+
+              <!-- Mid-Round Evaluation Popup Overlay -->
+              <section class="cm-overlay bg-notion-bg rounded-lg border border-notion-border p-6 text-center max-w-[420px] mx-auto shadow-[0_8px_30px_rgba(0,0,0,0.4)] absolute top-12 left-1/2 -translate-x-1/2 z-40 hidden" id="timeRoundResultOverlay">
+                <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Round Complete</p>
+                <h3 class="text-lg font-bold text-notion-text mb-3" id="timeRoundTitle">Round 1/5</h3>
+                
+                <div class="my-4 flex flex-col gap-2.5 text-xs text-left max-w-[320px] mx-auto">
+                  <div class="flex justify-between border-b border-notion-border pb-1.5">
+                    <span class="text-notion-muted">Target Duration:</span>
+                    <strong id="timeRoundTarget" class="text-white">0.00s</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-notion-border pb-1.5">
+                    <span class="text-notion-muted">Your Duration:</span>
+                    <strong id="timeRoundPlayer" class="text-white">0.00s</strong>
+                  </div>
+                  <div class="flex justify-between border-b border-notion-border pb-1.5">
+                    <span class="text-notion-muted">Delta Deviation:</span>
+                    <strong id="timeRoundDelta" class="text-[#C04D4D] font-bold">0.00s</strong>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-notion-muted">Accuracy:</span>
+                    <strong id="timeRoundAccuracy" class="text-emerald-400 font-bold">0.0%</strong>
+                  </div>
+                </div>
+                
+                <button class="prime-btn w-full mt-2 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="timeNextRoundBtn" type="button">Next Round</button>
+              </section>
+            </section>
+
+            <!-- Final Evaluation Summary Overlay Modal -->
+            <section class="cm-result-modal hidden" id="timeResultModal">
+              <article class="cm-result-card bg-notion-bg border border-notion-border p-6 max-w-[480px] w-full text-center flex flex-col gap-4 shadow-[0_8px_24px_rgba(0,0,0,0.06)]">
+                <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Session Complete</p>
+                <h3 class="text-xl font-bold text-notion-text">Time Estimation Results</h3>
+                <p class="cm-result-score text-5xl font-extrabold text-[#C04D4D]" id="timeResultScore">0.0</p>
+                <p class="cm-result-tagline text-xs text-notion-muted" id="timeResultTagline">Elite interval timing. Solid sustained attention.</p>
+
+                <div class="cm-result-metrics flex flex-wrap justify-center gap-2">
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs">Accuracy <strong id="timeResultAccuracy">0%</strong></p>
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs">Total Duration <strong id="timeResultTotalDuration">0s</strong></p>
+                </div>
+
+                <!-- Top 10 SQLite Leaderboard for Time -->
+                <section class="result-top10 bg-notion-bg border border-notion-border rounded p-4 flex flex-col gap-2">
+                  <div class="result-top10-head flex justify-between items-center text-xs">
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Top 10 · Time Estimation</p>
+                    <p id="timeResultRank" class="font-semibold text-notion-text">Rank -</p>
+                  </div>
+                  <ol class="result-top10-list flex flex-col gap-1.5" id="timeResultTop10"></ol>
+                </section>
+
+                <div class="overlay-actions flex justify-center gap-3 border-t border-notion-border pt-4">
+                  <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="timeResultPlayAgain" type="button">Play Again</button>
+                  <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="timeResultBack" type="button">Back to Dashboard</button>
                 </div>
               </article>
             </section>
