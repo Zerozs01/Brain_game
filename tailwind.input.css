@@ -3,17 +3,28 @@
 @source "./index.html";
 
 @theme {
-  /* Main Colors */
-  --color-notion-bg: #191919;
-  --color-notion-text: #D4D4D4;
-  --color-notion-border: #2E2E2E;
-  --color-notion-muted: #787774;
+  /* Flow State Sanctuary Core Color Tokens */
+  --color-flow-bg: #111317;
+  --color-flow-surface: #161920;
+  --color-flow-card: #1f232b;
+  --color-flow-border: rgba(0, 240, 255, 0.08);
+  --color-flow-primary: #dbfcff;
+  --color-flow-primary-container: #00f0ff;
+  --color-flow-secondary: #50e084;
+  --color-flow-tertiary: #fdf2ff;
 
-  /* Dark Mode Callout Backgrounds */
-  --color-notion-green: #2B3A31;   /* Brain / Skill */
-  --color-notion-purple: #3C2D43;  /* Work */
-  --color-notion-blue: #273646;    /* Energy */
-  --color-notion-brown: #43351C;   /* Setting */
+  /* Legacy Notion System Mapped to Flow State Sanctuary for backward compatibility */
+  --color-notion-bg: #111317;
+  --color-notion-text: #D4D4D4;
+  --color-notion-border: rgba(219, 252, 255, 0.08);
+  --color-notion-muted: #7d8594;
+
+  /* Callout Panels Mapped to Translucent Space Themes */
+  --color-notion-green: #14221b;   /* Speed / Visual */
+  --color-notion-purple: #1f142b;  /* Memory */
+  --color-notion-blue: #141c2b;    /* Sound */
+  --color-notion-brown: #251e13;   /* Attention */
   
   --font-notion: "Inter", "Plus Jakarta Sans", "ui-sans-serif", "system-ui", -apple-system, sans-serif;
+  --font-space: "Space Grotesk", "Inter", sans-serif;
 }

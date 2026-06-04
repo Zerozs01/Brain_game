@@ -1,21 +1,25 @@
-/* Notion-Style Core Design System */
+/* Flow State Sanctuary Core Design System */
 :root {
-  --surface: #202020;         /* Sidebar / Top Status background */
-  --surface-low: #191919;     /* Deep canvas background matching Reference Image 2 */
-  --surface-high: #2D2D2D;    /* Main widgets / active buttons */
-  --surface-border: #2E2E2E;  /* Solid dark border */
+  --surface: #161920;                  /* Sidebar / Top Status background (surface-container-low) */
+  --surface-low: #111317;              /* Deep space background matching DESIGN.md */
+  --surface-high: #1f232b;             /* Main widgets / active buttons / cards (surface-container-highest) */
+  --surface-border: rgba(219, 252, 255, 0.08); /* Ghost border style fallback (15% opacity) */
   
-  --on-surface: #D4D4D4;      /* Light grey text */
-  --muted: #787774;           /* Neutral muted text */
+  --on-surface: #E2E8F0;      /* Slate-like light text */
+  --muted: #7d8594;           /* Space-tinted muted text */
   
-  --primary: #FFFFFF;         /* Solid white for headings */
-  --primary-soft: #E0E0E0;
-  --success: #2B3A31;         /* Notion Dark Green */
-  --danger: #3C2D43;          /* Notion Dark Purple */
+  --primary: #dbfcff;         /* Solid Flow State Cyan Primary */
+  --primary-soft: #bfe7ef;
+  --primary-container: #00f0ff;
+  --success: #14221b;         /* Flow State success tint background */
+  --danger: #1f142b;          /* Flow State danger tint background */
   
-  --radius-md: 6px;
-  --radius-lg: 8px;
-  --radius-xl: 12px;
+  --font-space: "Space Grotesk", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  
+  --radius-md: 12px;          /* Softer, more modern rounded corners */
+  --radius-lg: 16px;
+  --radius-xl: 24px;          /* Matches the 1.5rem (xl) padding rule in DESIGN.md */
 }
 
 * {
@@ -373,26 +377,26 @@ button {
 
 /* Time Estimation Active Glow Effects */
 .time-ring-observe {
-  background-color: #273646 !important;
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 30px rgba(59, 130, 246, 0.5) !important;
-  color: #60A5FA !important;
+  background-color: rgba(0, 240, 255, 0.1) !important;
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.3) !important;
+  color: #dbfcff !important;
   transform: scale(1.03);
 }
 
 .time-ring-active {
-  background-color: #43351C !important;
-  border-color: #FBBF24 !important;
-  box-shadow: 0 0 35px rgba(251, 191, 36, 0.65) !important;
-  color: #FBBF24 !important;
+  background-color: rgba(168, 85, 247, 0.15) !important;
+  border-color: #a855f7 !important;
+  box-shadow: 0 0 35px rgba(168, 85, 247, 0.4) !important;
+  color: #ffffff !important;
   transform: scale(1.05);
 }
 
 .time-ring-success {
-  background-color: #2B3A31 !important;
-  border-color: #10B981 !important;
-  box-shadow: 0 0 30px rgba(16, 185, 129, 0.5) !important;
-  color: #10B981 !important;
+  background-color: rgba(80, 224, 132, 0.15) !important;
+  border-color: #50e084 !important;
+  box-shadow: 0 0 30px rgba(80, 224, 132, 0.3) !important;
+  color: #50e084 !important;
 }
 
 /* Animation วงคลื่นตอนแสดง Target Time */
@@ -421,6 +425,100 @@ button {
   color: #FFFFFF !important;
 }
 
+/* Easy Mode Pulse Animation (1.0s interval) */
+@keyframes time-pulse-easy {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.7);
+  }
+  50% {
+    transform: scale(1.08);
+    box-shadow: 0 0 0 25px rgba(168, 85, 247, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0);
+  }
+}
+
+.animate-time-pulse-easy {
+  animation: time-pulse-easy 1.0s infinite ease-in-out !important;
+  background: radial-gradient(circle, #A855F7 0%, #3B82F6 100%) !important;
+  border-color: #A855F7 !important;
+  color: #FFFFFF !important;
+}
+
+/* Vortex spin animation for Time Estimation optical illusion */
+@keyframes spin-chaotic-a {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(110deg) scale(1.06);
+  }
+  50% {
+    transform: rotate(70deg) scale(0.96);
+  }
+  75% {
+    transform: rotate(260deg) scale(1.04);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes spin-chaotic-b {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  30% {
+    transform: rotate(-160deg) scale(0.92);
+  }
+  60% {
+    transform: rotate(-50deg) scale(1.08);
+  }
+  80% {
+    transform: rotate(-290deg) scale(0.96);
+  }
+  100% {
+    transform: rotate(-360deg) scale(1);
+  }
+}
+
+@keyframes spin-chaotic-c {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  40% {
+    transform: rotate(200deg) scale(1.12);
+  }
+  70% {
+    transform: rotate(300deg) scale(0.88);
+  }
+  100% {
+    transform: rotate(720deg) scale(1);
+  }
+}
+
+.spin-vortex #time-illusion-group-a {
+  animation: spin-chaotic-a 7.3s ease-in-out infinite !important;
+  transform-origin: 50px 50px;
+}
+
+.spin-vortex #time-illusion-group-b {
+  animation: spin-chaotic-b 9.1s ease-in-out infinite !important;
+  transform-origin: 50px 50px;
+}
+
+.spin-vortex #time-illusion-group-c {
+  animation: spin-chaotic-c 5.7s ease-in-out infinite !important;
+  transform-origin: 50px 50px;
+}
+
+.spin-vortex {
+  animation: none !important;
+}
+
 .launcher-grid {
   display: grid;
   gap: 0.5rem;
@@ -429,20 +527,47 @@ button {
 .launcher-card {
   border: 1px solid var(--surface-border);
   border-radius: var(--radius-lg);
-  padding: 0.8rem 1rem;
+  padding: 1rem 1.25rem;
   text-align: left;
   color: var(--on-surface);
-  background-color: var(--surface);
+  background-color: var(--surface-high);
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.8rem;
+  gap: 1rem;
   cursor: pointer;
-  transition: background-color 150ms ease;
+  transition: transform 200ms cubic-bezier(0.16, 1, 0.3, 1), box-shadow 200ms ease, background-color 200ms ease;
 }
 
 .launcher-card:hover {
-  background-color: var(--surface-low);
+  background-color: #242a36;
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0, 240, 255, 0.12);
+}
+
+/* Category-specific hover glows */
+.hover-glow-green:hover {
+  background-color: #14221b !important;
+  box-shadow: 0 8px 24px rgba(80, 224, 132, 0.18) !important;
+  border-color: rgba(80, 224, 132, 0.3) !important;
+}
+
+.hover-glow-purple:hover {
+  background-color: #1f142b !important;
+  box-shadow: 0 8px 24px rgba(192, 132, 252, 0.18) !important;
+  border-color: rgba(192, 132, 252, 0.3) !important;
+}
+
+.hover-glow-yellow:hover {
+  background-color: #251e13 !important;
+  box-shadow: 0 8px 24px rgba(251, 191, 36, 0.18) !important;
+  border-color: rgba(251, 191, 36, 0.3) !important;
+}
+
+.hover-glow-blue:hover {
+  background-color: #141c2b !important;
+  box-shadow: 0 8px 24px rgba(96, 165, 250, 0.18) !important;
+  border-color: rgba(96, 165, 250, 0.3) !important;
 }
 
 .launcher-icon {
@@ -692,39 +817,64 @@ button {
 .prime-btn,
 .soft-btn,
 .sky-btn {
-  border: 1px solid var(--surface-border);
   border-radius: var(--radius-md);
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   cursor: pointer;
-  transition: background-color 150ms ease;
-  font-weight: 500;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 .prime-btn {
-  color: var(--on-surface);
-  background-color: var(--surface-high);
+  color: #111317; /* Dark text for high contrast on neon */
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-container) 100%);
+  border: none;
+  box-shadow: 0 4px 14px rgba(0, 240, 255, 0.2), inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 150ms ease, box-shadow 150ms ease, filter 150ms ease;
+  font-family: var(--font-space), sans-serif;
 }
 
 .prime-btn:hover {
-  background-color: var(--surface-border);
+  transform: translateY(-1px);
+  filter: brightness(1.05);
+  box-shadow: 0 6px 20px rgba(0, 240, 255, 0.35), inset 0 -2px 0 rgba(0, 0, 0, 0.15);
+}
+
+.prime-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(0, 240, 255, 0.15), inset 0 -1px 0 rgba(0, 0, 0, 0.15);
 }
 
 .soft-btn {
   color: var(--on-surface);
-  background-color: var(--surface);
+  background-color: transparent;
+  border: 1px solid rgba(219, 252, 255, 0.15); /* Ghost outline-variant 15% */
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
 }
 
 .soft-btn:hover {
-  background-color: var(--surface-high);
+  background-color: rgba(0, 240, 255, 0.05); /* 5% primary tint */
+  border-color: rgba(219, 252, 255, 0.3);
+  transform: translateY(-1px);
+}
+
+.soft-btn:active {
+  transform: translateY(0);
 }
 
 .sky-btn {
-  color: #2F6C8F;
-  background-color: #E7F3F8;
+  color: #00f0ff;
+  background-color: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.2);
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
 }
 
 .sky-btn:hover {
-  background-color: #dbeaf0;
+  background-color: rgba(0, 240, 255, 0.15);
+  border-color: rgba(0, 240, 255, 0.4);
+  transform: translateY(-1px);
 }
 
 .small {
