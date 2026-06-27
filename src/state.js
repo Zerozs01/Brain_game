@@ -67,6 +67,21 @@ export const appState = {
     isComplete: false,
     summaryVisible: false,
     sessionSaved: false
+  },
+  perfectPitch: {
+    round: 1,
+    totalRounds: 5,
+    score: 0,
+    scores: [],
+    targets: [],
+    guesses: [],
+    centsErrors: [],
+    phase: "idle",
+    targetFrequency: 0,
+    guessFrequency: 440,
+    sessionSaved: false,
+    startTime: 0,
+    isPlaying: false
   }
 };
 
@@ -213,5 +228,31 @@ export const refs = {
   timeResultBack: document.getElementById("timeResultBack"),
   timeStartOverlay: document.getElementById("timeStartOverlay"),
   timeEasyModeBtn: document.getElementById("timeEasyModeBtn"),
-  timeHardModeBtn: document.getElementById("timeHardModeBtn")
+  timeHardModeBtn: document.getElementById("timeHardModeBtn"),
+  ppRoundHud: document.getElementById("ppRoundHud"),
+  ppScoreHud: document.getElementById("ppScoreHud"),
+  ppStartOverlay: document.getElementById("pitchStartOverlay"),
+  ppStartBtn: null,
+  ppEasyBtn: document.getElementById("pitchEasyModeBtn"),
+  ppMediumBtn: document.getElementById("pitchMediumModeBtn"),
+  ppHardBtn: document.getElementById("pitchHardModeBtn"),
+  ppPlayTargetBtn: document.getElementById("ppPlayTargetBtn"),
+  ppReplayContainer: document.getElementById("ppReplayContainer"),
+  ppSlidersContainer: document.getElementById("ppSlidersContainer"),
+  ppResultListContainer: document.getElementById("pitchResultListContainer"),
+  ppCurrentNote: document.getElementById("ppCurrentNote"),
+  ppCurrentHz: document.getElementById("ppCurrentHz"),
+  ppPhaseText: document.getElementById("pitchPhaseText"),
+  ppVisualizer: document.getElementById("ppVisualizer"),
+  ppSubmitBtn: document.getElementById("ppSubmitBtn"),
+  ppRoundResultOverlay: document.getElementById("pitchRoundResultOverlay"),
+  ppRoundTitle: document.getElementById("pitchRoundFeedback"),
+  ppNextRoundBtn: document.getElementById("pitchNextRoundBtn"),
+  ppResultModal: document.getElementById("ppResultModal"),
+  ppResultScore: document.getElementById("ppResultScore"),
+  ppResultAccuracy: document.getElementById("ppResultAccuracy"),
+  ppResultRank: document.getElementById("ppResultRank"),
+  ppResultTop10: document.getElementById("ppResultTop10"),
+  ppResultPlayAgain: document.getElementById("ppResultPlayAgain"),
+  ppResultBack: document.getElementById("ppResultBack")
 };

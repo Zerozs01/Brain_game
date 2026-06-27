@@ -1914,3 +1914,269 @@ button {
   left: 0;
   color: var(--muted);
 }
+
+/* ─── Perfect Pitch Game ──────────────────────────────────────────────────── */
+
+/* Stage container */
+.pp-stage {
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+  border: 1px solid #22262e;
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.04), 0 2px 12px rgba(0, 0, 0, 0.4);
+}
+
+/* Canvas fills the full width, fixed height */
+.pp-visualizer-canvas {
+  display: block;
+  width: 100%;
+  height: 130px;
+  background: #111317;
+}
+
+/* Phase badge floating above canvas */
+.pp-phase-badge {
+  display: inline-block;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #00f0ff;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.18);
+  backdrop-filter: blur(4px);
+}
+
+/* Interaction zone below canvas */
+.pp-interact-zone {
+  flex: 1;
+  background: #14171c;
+}
+
+/* Slider column */
+.pp-slider-col {
+  padding: 0.25rem 0;
+}
+
+/* Vertical pitch track container — controls display size */
+.pitch-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 240px;
+}
+
+/* Override .slider-range for the pitch variant */
+.pitch-slider-range {
+  --track-bg: linear-gradient(
+    180deg,
+    #00f0ff 0%,
+    #6366f1 40%,
+    #a855f7 70%,
+    #f43f5e 100%
+  );
+  width: 18px;
+  height: 240px;
+}
+
+.pitch-slider-range::-webkit-slider-thumb {
+  background: #ffffff;
+  border: 2.5px solid #111317;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+  width: 24px;
+  height: 24px;
+}
+
+.pitch-slider-range::-moz-range-thumb {
+  background: #ffffff;
+  border: 2.5px solid #111317;
+  box-shadow: 0 0 8px rgba(0, 240, 255, 0.6);
+  width: 24px;
+  height: 24px;
+}
+
+/* Pitch readout card */
+.pp-readout-card {
+  background: #111317;
+  border: 1px solid #22262e;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+}
+
+.pp-note-display {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.pp-hz-display {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #00f0ff;
+  letter-spacing: 0.03em;
+}
+
+/* Submit button */
+.pp-submit-btn {
+  padding: 0.7rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  color: #ffffff;
+  background: linear-gradient(135deg, #00f0ff 0%, #6366f1 100%);
+  box-shadow: 0 0 16px rgba(0, 240, 255, 0.25), 0 2px 8px rgba(0,0,0,0.3);
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
+}
+
+.pp-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.4), 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.pp-submit-btn:active {
+  transform: scale(0.97);
+}
+
+.pp-submit-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Replay button */
+.pp-replay-btn {
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.6rem;
+  border: 1px solid #2d3139;
+  background: rgba(139, 92, 246, 0.12);
+  color: #a78bfa;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  text-align: center;
+}
+
+.pp-replay-btn:hover {
+  background: rgba(139, 92, 246, 0.22);
+  border-color: #6366f1;
+}
+
+/* Difficulty buttons */
+.diff-btn {
+  background: transparent;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+}
+
+.diff-btn--active {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(255, 255, 255, 0.25) !important;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.06);
+}
+
+/* Start button in lobby */
+.pp-start-btn {
+  padding: 0.8rem 2.5rem;
+  font-size: 0.9rem;
+  color: #111317;
+  background: linear-gradient(135deg, #00f0ff 0%, #6366f1 100%);
+  border: none;
+  box-shadow: 0 0 24px rgba(0, 240, 255, 0.35), 0 4px 16px rgba(0,0,0,0.4);
+}
+
+/* Round result card inside overlay */
+.pp-result-card {
+  background: #14171c;
+  border: 1px solid #22262e;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 40px rgba(0, 240, 255, 0.06);
+}
+
+/* Custom Utility Classes for Perfect Pitch and UI overlays */
+.font-space {
+  font-family: var(--font-space), sans-serif;
+}
+.bg-surface-low {
+  background-color: var(--surface-low);
+}
+.border-surface-border {
+  border-color: var(--surface-border);
+}
+.text-primary {
+  color: var(--primary-container, #00f0ff);
+}
+.text-muted {
+  color: var(--muted);
+}
+
+/* Antigravity Vertical Slider styles */
+.pitch-slider-range.slider-antigravity::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--primary-container, #00f0ff); /* สี Cyan */
+  border: 3px solid var(--surface-low, #111317);
+  /* เงาชี้ขึ้นด้านบนตลอดเวลา เพื่อสร้างความรู้สึกว่ามันกำลังดันตัวขึ้น */
+  box-shadow: 0 -10px 25px rgba(0, 240, 255, 0.5), 0 4px 10px rgba(0,0,0,0.5);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* เมื่อคลิกลาก ให้ตัว Slider ขยายขึ้นนิดนึงเหมือนดึงพลังงาน */
+.pitch-slider-range.slider-antigravity:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+  box-shadow: 0 -15px 35px rgba(0, 240, 255, 0.7), 0 6px 15px rgba(0,0,0,0.6);
+}
+
+/* สำหรับ Firefox */
+.pitch-slider-range.slider-antigravity::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--primary-container, #00f0ff); /* สี Cyan */
+  border: 3px solid var(--surface-low, #111317);
+  box-shadow: 0 -10px 25px rgba(0, 240, 255, 0.5), 0 4px 10px rgba(0,0,0,0.5);
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.pitch-slider-range.slider-antigravity:active::-moz-range-thumb {
+  transform: scale(1.15);
+  box-shadow: 0 -15px 35px rgba(0, 240, 255, 0.7), 0 6px 15px rgba(0,0,0,0.6);
+}
+
+/* Custom arbitrary classes for JavaScript color switching */
+.text-\[\#22C55E\] {
+  color: #22C55E !important;
+}
+.text-\[\#FBBF24\] {
+  color: #FBBF24 !important;
+}
+.text-\[\#A855F7\] {
+  color: #A855F7 !important;
+}/* Active style for note count selector buttons */
+.pp-note-count-btn.active {
+  background-color: #00f0ff !important;
+  color: #111317 !important;
+  border-color: #00f0ff !important;
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* Fix scrolling for Perfect Pitch round results overlay when showing multiple notes */
+#pitchRoundResultOverlay {
+  max-height: calc(100% - 2rem);
+  overflow-y: auto;
+  inset: 1rem auto auto 50%;
+}
+

@@ -10,17 +10,51 @@
     "predev": "node build-if-changed.js",
     "dev": "electron .",
     "rebuild-native": "electron-rebuild -f -w better-sqlite3",
-    "postinstall": "npm run rebuild-native"
+    "postinstall": "npm run rebuild-native",
+    "build": "npm run build:tailwind && npx electron-builder",
+    "build:win": "npm run build:tailwind && npx electron-builder --win"
   },
   "devDependencies": {
     "@tailwindcss/cli": "^4.2.2",
     "autoprefixer": "^10.4.27",
     "electron": "^31.3.1",
+    "electron-builder": "^25.1.8",
     "electron-rebuild": "^3.2.9",
     "postcss": "^8.5.9",
     "tailwindcss": "^4.2.2"
   },
   "dependencies": {
     "better-sqlite3": "^12.8.0"
+  },
+  "build": {
+    "appId": "com.zeroz.braingame",
+    "productName": "Brain_game",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "styles.css",
+      "tailwind.generated.css",
+      "src/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      "node_modules/better-sqlite3/**/*"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "deleteAppDataOnUninstall": false
+    }
   }
 }

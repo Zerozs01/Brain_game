@@ -8,6 +8,7 @@ import { initColorMatch, startColorMatchGame } from './games/colorMatch.js';
 import { initColorMemory, startColorMemorySession } from './games/colorMemory.js';
 import { initTimeEstimation, startTimeGameSession } from './games/timeEstimation.js';
 import { initSequenceMemory, resetGame as resetSequenceMemory } from './games/sequenceMemory.js';
+import { initPerfectPitch, resetPerfectPitchGame } from './games/perfectPitch.js';
 import { initTimeAudio } from './helpers.js';
 
 export async function loadStatsOverview() {
@@ -58,6 +59,11 @@ function bindLaunchers() {
         setView("sequenceMemoryView", loadStatsOverview);
         resetSequenceMemory();
       }
+
+      if (button.dataset.launch === "perfectPitch") {
+        setView("perfectPitchView", loadStatsOverview);
+        resetPerfectPitchGame();
+      }
     });
   });
 }
@@ -75,6 +81,7 @@ async function init() {
   initColorMemory(loadStatsOverview);
   initTimeEstimation(loadStatsOverview);
   initSequenceMemory(loadStatsOverview);
+  initPerfectPitch(loadStatsOverview);
 
   renderDashboardWidgets([], { summary: {}, byGame: [] });
   renderTopStatus();

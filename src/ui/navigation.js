@@ -2,7 +2,7 @@ import { appState, refs } from '../state.js';
 
 export function setView(viewId, loadStatsCallback) {
   const previousView = appState.activeView;
-  const gameViews = ["colorMatchView", "colorMemoryView", "timeView", "sequenceMemoryView"];
+  const gameViews = ["colorMatchView", "colorMemoryView", "timeView", "sequenceMemoryView", "perfectPitchView"];
   if (gameViews.includes(previousView) && previousView !== viewId) {
     cancelUnfinishedSessions();
   }
@@ -41,6 +41,7 @@ function cancelUnfinishedSessions() {
     if (appState.resets.colorMemory) appState.resets.colorMemory();
     if (appState.resets.time) appState.resets.time();
     if (appState.resets.sequenceMemory) appState.resets.sequenceMemory();
+    if (appState.resets.perfectPitch) appState.resets.perfectPitch();
   }
 }
 

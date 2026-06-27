@@ -246,7 +246,18 @@
                     <span class="px-2 py-0.5 bg-notion-bg border border-notion-border rounded text-[10px] font-semibold text-notion-muted">Pattern</span>
                   </div>
 
-                  <button class="soft-btn hover-glow-blue w-full" type="button" data-launch="colorMemory">Try Sample Drill</button>
+                  <button class="launcher-card hover-glow-blue w-full" type="button" data-launch="perfectPitch">
+                    <div class="flex items-center gap-3.5">
+                      <span class="launcher-icon w-8 h-8 rounded bg-notion-blue flex items-center justify-center text-[#2F6C8F]" aria-hidden="true">
+                        <svg class="w-4 h-4" viewBox="0 0 24 24"><use href="#icon-sound"></use></svg>
+                      </span>
+                      <div class="launcher-copy">
+                        <h3 class="text-sm font-semibold text-notion-text">Perfect Pitch</h3>
+                        <p class="text-xs text-notion-muted">Test and train your pitch recall.</p>
+                      </div>
+                    </div>
+                    <span class="launcher-cta text-xs font-semibold text-notion-muted">Play →</span>
+                  </button>
                 </article>
 
                 <!-- Attention Tests Section (Callout Brown Background) -->
@@ -529,7 +540,7 @@
                   <div id="soundDropdownMenu" class="hidden absolute left-0 mt-1 w-44 rounded bg-[#222222] border border-[#3E3E3E] shadow-xl z-50 transition-all duration-150">
                     <div class="py-1 flex flex-col" role="menu" aria-orientation="vertical">
                       <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="category:sound" role="menuitem">All Sound Games</button>
-                      <div class="px-4 py-2 text-xs font-semibold text-notion-muted italic select-none">No sound games yet</div>
+                      <button class="stats-filter-btn text-left px-4 py-2 text-xs font-semibold text-notion-muted hover:bg-[#2D2D2D] hover:text-notion-text transition-colors border-0 bg-transparent rounded-none" type="button" data-game-filter="sound_perfect_pitch" role="menuitem">Perfect Pitch</button>
                     </div>
                   </div>
                 </div>
@@ -964,6 +975,139 @@
                 <div class="overlay-actions flex justify-center gap-3 border-t border-notion-border pt-4">
                   <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="timeResultPlayAgain" type="button">Play Again</button>
                   <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="timeResultBack" type="button">Back to Dashboard</button>
+                </div>
+              </article>
+            </section>
+          </section>
+
+
+          <!-- 🎵 VIEW: PERFECT PITCH -->
+          <section class="view flex flex-col gap-4" id="perfectPitchView">
+            <header class="mode-header flex items-center justify-between pb-3 border-b border-notion-border">
+              <button class="soft-btn px-3 py-1.5 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold text-notion-text rounded cursor-pointer transition-colors" type="button" data-back="dashboardView" id="ppPauseBtn">← Back</button>
+              <p class="mode-label text-sm text-notion-muted">BrainDash <strong class="text-notion-text">Perfect Pitch</strong></p>
+              <div class="mode-hud flex items-center gap-4 text-xs font-medium text-notion-muted">
+                <span>Round: <strong id="ppRoundHud" class="text-notion-text">1/5</strong></span>
+                <span>Avg: <strong id="ppScoreHud" class="text-notion-text">0.0</strong></span>
+              </div>
+            </header>
+
+            <!-- Stage Container -->
+            <section class="pp-stage relative rounded-xl overflow-hidden" style="background:var(--surface-low,#1a1d22);">
+
+              <!-- ═══ LOBBY OVERLAY ═══ -->
+              <div id="pitchStartOverlay" class="absolute inset-0 z-40 flex flex-col items-center justify-center bg-[#111317]/95 backdrop-blur-sm rounded-xl border border-surface-border p-8 transition-all duration-300">
+                  <div class="category-icon sound mb-4 w-16 h-16 text-[#00f0ff] flex items-center justify-center">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke="currentColor" fill="none" class="w-12 h-12"><path d="M12 3v18M8 8v8M16 6v12M4 11v2M20 10v4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <h2 class="text-3xl font-bold mb-2 text-white">Perfect Pitch</h2>
+                  <p class="text-muted text-center mb-6 max-w-md text-xs">Train your absolute pitch. Listen to the target frequency and recreate it.</p>
+                  
+                  <!-- Notes per Round Selector -->
+                  <div class="flex flex-col items-center gap-2 mb-6">
+                      <span class="text-[10px] font-bold text-muted uppercase tracking-wider">Notes per Round</span>
+                      <div class="flex gap-2">
+                          <button type="button" class="pp-note-count-btn px-3 py-1.5 rounded-lg border border-surface-border bg-surface-low text-xs font-bold text-white cursor-pointer active" data-count="1">1 Note</button>
+                          <button type="button" class="pp-note-count-btn px-3 py-1.5 rounded-lg border border-surface-border bg-surface-low text-xs font-bold text-white cursor-pointer" data-count="2">2 Notes</button>
+                          <button type="button" class="pp-note-count-btn px-3 py-1.5 rounded-lg border border-surface-border bg-surface-low text-xs font-bold text-white cursor-pointer" data-count="3">3 Notes</button>
+                          <button type="button" class="pp-note-count-btn px-3 py-1.5 rounded-lg border border-surface-border bg-surface-low text-xs font-bold text-white cursor-pointer" data-count="4">4 Notes</button>
+                          <button type="button" class="pp-note-count-btn px-3 py-1.5 rounded-lg border border-surface-border bg-surface-low text-xs font-bold text-white cursor-pointer" data-count="5">5 Notes</button>
+                      </div>
+                  </div>
+                  
+                  <div class="flex gap-4">
+                      <button id="pitchEasyModeBtn" class="soft-btn flex flex-col items-center p-4 min-w-[120px] hover-glow-blue border border-surface-border rounded-xl cursor-pointer" style="background: rgba(255,255,255,0.03);" type="button">
+                          <span class="text-lg font-bold text-white">Easy</span>
+                          <span class="text-xs text-muted mt-1 text-[10px]">2.5s + Replay</span>
+                      </button>
+                      <button id="pitchMediumModeBtn" class="soft-btn flex flex-col items-center p-4 min-w-[120px] hover-glow-yellow border border-surface-border rounded-xl cursor-pointer" style="background: rgba(255,255,255,0.03);" type="button">
+                          <span class="text-lg font-bold text-white">Medium</span>
+                          <span class="text-xs text-muted mt-1 text-[10px]">1.0s Listen Time</span>
+                      </button>
+                      <button id="pitchHardModeBtn" class="soft-btn flex flex-col items-center p-4 min-w-[120px] hover-glow-purple border border-surface-border rounded-xl cursor-pointer" style="background: rgba(255,255,255,0.03);" type="button">
+                          <span class="text-lg font-bold text-white">Hard</span>
+                          <span class="text-xs text-muted mt-1 text-[10px]">1.5s + 31-EDO Scale</span>
+                      </button>
+                  </div>
+              </div>
+
+              <!-- ═══ CANVAS VISUALIZER ═══ -->
+              <canvas id="ppVisualizer" class="pp-visualizer-canvas" width="800" height="130"></canvas>
+
+              <!-- ═══ PHASE TEXT ═══ -->
+              <div class="absolute top-3 left-0 right-0 flex justify-center pointer-events-none" style="z-index:5;">
+                <span id="pitchPhaseText" class="pp-phase-badge">Ready...</span>
+              </div>
+
+              <!-- ═══ MAIN INTERACTION ZONE ═══ -->
+              <div class="pp-interact-zone flex items-stretch gap-5 p-5 pt-3">
+
+                <!-- Left: Container for dynamic sliders -->
+                <div id="ppSlidersContainer" class="flex gap-6 items-stretch">
+                  <!-- Sliders dynamically generated here -->
+                </div>
+
+                <!-- Right: Controls & Info -->
+                <div class="flex flex-col flex-1 gap-4 justify-between">
+
+                  <!-- Current pitch readout -->
+                  <div class="pp-readout-card">
+                    <p class="text-[9px] font-bold uppercase tracking-widest mb-0.5" style="color:#9b9fa7;">Your Pitch</p>
+                    <p id="ppCurrentNote" class="pp-note-display">A4</p>
+                    <p id="ppCurrentHz" class="pp-hz-display">440.0 Hz</p>
+                  </div>
+
+                  <!-- Replay target (Easy mode only) -->
+                  <div id="ppReplayContainer" class="hidden">
+                    <button id="ppPlayTargetBtn" type="button" class="pp-replay-btn w-full">
+                      🔊 Replay Target Note
+                    </button>
+                  </div>
+
+                  <!-- Submit -->
+                  <button id="ppSubmitBtn" type="button" class="pp-submit-btn hidden">
+                    Submit Answer ↵
+                  </button>
+                </div>
+              </div>
+
+              <!-- ═══ ROUND RESULT OVERLAY ═══ -->
+              <div id="pitchRoundResultOverlay" class="hidden cm-overlay z-30">
+                  <h3 id="pitchRoundFeedback" class="text-2xl font-bold mb-2 text-white">Result</h3>
+                  
+                  <!-- Dynamic result list -->
+                  <div id="pitchResultListContainer" class="flex flex-col gap-3 my-4 w-full max-w-md">
+                      <!-- Rows generated dynamically by JS -->
+                  </div>
+                  
+                  <button id="pitchNextRoundBtn" class="prime-btn mt-6 w-full">Next Pitch</button>
+              </div>
+
+            </section>
+
+            <!-- ═══ FINAL RESULTS MODAL ═══ -->
+            <section class="cm-result-modal hidden" id="ppResultModal">
+              <article class="cm-result-card bg-notion-bg border border-notion-border p-6 max-w-[480px] w-full text-center flex flex-col gap-4 shadow-[0_8px_24px_rgba(0,240,255,0.06)]">
+                <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Session Complete</p>
+                <h3 class="text-xl font-bold text-notion-text">Perfect Pitch Results</h3>
+                <p class="cm-result-score text-5xl font-extrabold" style="color:#00f0ff;" id="ppResultScore">0.0</p>
+                <p class="text-xs text-notion-muted">Auditory memory and pitch precision drill.</p>
+
+                <div class="cm-result-metrics flex flex-wrap justify-center gap-2">
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs">Accuracy <strong id="ppResultAccuracy">0%</strong></p>
+                  <p class="px-2.5 py-1 bg-notion-bg border border-notion-border rounded-full text-xs" id="ppResultRank">Rank —</p>
+                </div>
+
+                <section class="result-top10 bg-notion-bg border border-notion-border rounded p-4 flex flex-col gap-2">
+                  <div class="result-top10-head flex justify-between items-center text-xs">
+                    <p class="kicker text-[9px] font-bold text-notion-muted uppercase tracking-wider">Top 10 · Perfect Pitch</p>
+                  </div>
+                  <ol class="result-top10-list flex flex-col gap-1.5" id="ppResultTop10"></ol>
+                </section>
+
+                <div class="overlay-actions flex justify-center gap-3 border-t border-notion-border pt-4">
+                  <button class="prime-btn px-4 py-2 bg-[#37352F] text-white hover:bg-[#1f1e1b] text-xs font-semibold rounded cursor-pointer transition-colors" id="ppResultPlayAgain" type="button">Play Again</button>
+                  <button class="soft-btn px-4 py-2 bg-notion-bg border border-notion-border hover:bg-notion-bg text-xs font-semibold rounded cursor-pointer transition-colors" id="ppResultBack" type="button">Back to Dashboard</button>
                 </div>
               </article>
             </section>

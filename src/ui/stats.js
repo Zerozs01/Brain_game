@@ -530,7 +530,7 @@ function getFilteredStatsHistory(items) {
         if (cat === "memory" && item.gameType !== "color_memory" && item.gameType !== "sequence_memory") {
           return false;
         }
-        if (cat === "sound") {
+        if (cat === "sound" && !item.gameType.startsWith("sound_") && !item.gameType.startsWith("audio_")) {
           return false;
         }
         if (cat === "attention" && item.gameType !== "time") {

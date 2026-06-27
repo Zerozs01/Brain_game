@@ -22,6 +22,22 @@ export const GAME_METADATA = Object.freeze({
   time: {
     label: "Time Estimation",
     cognitiveDomain: "attention"
+  },
+  sound_perfect_pitch: {
+    label: "Perfect Pitch",
+    cognitiveDomain: "memory"
+  },
+  sound_perfect_pitch_easy: {
+    label: "Perfect Pitch (Easy)",
+    cognitiveDomain: "memory"
+  },
+  sound_perfect_pitch_medium: {
+    label: "Perfect Pitch (Medium)",
+    cognitiveDomain: "memory"
+  },
+  sound_perfect_pitch_hard: {
+    label: "Perfect Pitch (Hard)",
+    cognitiveDomain: "memory"
   }
 });
 
@@ -47,7 +63,11 @@ export const PRIMARY_DOMAIN_KEYS = Object.freeze([
 export const SCORE_REFERENCE_BY_GAME = Object.freeze({
   color_match: 6000,
   color_memory: 50,
-  time: 100
+  time: 100,
+  sound_perfect_pitch: 100,
+  sound_perfect_pitch_easy: 100,
+  sound_perfect_pitch_medium: 100,
+  sound_perfect_pitch_hard: 100
 });
 
 export const SOUND_GAME_TYPE_PREFIXES = Object.freeze(["sound_", "audio_"]);
