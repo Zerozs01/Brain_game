@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
+const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const Database = require("better-sqlite3");
 
@@ -48,40 +48,49 @@ function runSchemaMigrations() {
 }
 
 function initDatabase() {
-  const dbPath = path.join(app.getPath("userData"), "brain_game.sqlite");
-  db = new Database(dbPath);
-  db.pragma("journal_mode = WAL");
+  try {
+    const dbPath = path.join(app.getPath("userData"), "brain_game.sqlite");
+    db = new Database(dbPath);
+    db.pragma("journal_mode = WAL");
 
-  db.exec(`
-    CREATE TABLE IF NOT EXISTS users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT NOT NULL UNIQUE,
-      created_at TEXT NOT NULL DEFAULT (datetime('now'))
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT NOT NULL UNIQUE,
+        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+      );
+
+      CREATE TABLE IF NOT EXISTS game_sessions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        game_type TEXT NOT NULL,
+        cognitive_domain TEXT,
+        score REAL NOT NULL,
+        accuracy REAL,
+        peak_multiplier INTEGER,
+        duration_seconds REAL,
+        round_count INTEGER,
+        detail_json TEXT,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY(user_id) REFERENCES users(id)
+      );
+
+      CREATE INDEX IF NOT EXISTS idx_game_sessions_user_created
+      ON game_sessions(user_id, created_at DESC);
+
+      CREATE INDEX IF NOT EXISTS idx_game_sessions_user_type_created
+      ON game_sessions(user_id, game_type, created_at DESC);
+    `);
+
+    runSchemaMigrations();
+  } catch (err) {
+    console.error("Failed to initialize SQLite database:", err);
+    dialog.showErrorBox(
+      "Database Initialization Error",
+      "Failed to initialize the database:\n" + err.message + "\n\nIf the application is already running, please close it first."
     );
-
-    CREATE TABLE IF NOT EXISTS game_sessions (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER NOT NULL,
-      game_type TEXT NOT NULL,
-      cognitive_domain TEXT,
-      score REAL NOT NULL,
-      accuracy REAL,
-      peak_multiplier INTEGER,
-      duration_seconds REAL,
-      round_count INTEGER,
-      detail_json TEXT,
-      created_at TEXT NOT NULL DEFAULT (datetime('now')),
-      FOREIGN KEY(user_id) REFERENCES users(id)
-    );
-
-    CREATE INDEX IF NOT EXISTS idx_game_sessions_user_created
-    ON game_sessions(user_id, created_at DESC);
-
-    CREATE INDEX IF NOT EXISTS idx_game_sessions_user_type_created
-    ON game_sessions(user_id, game_type, created_at DESC);
-  `);
-
-  runSchemaMigrations();
+    app.quit();
+  }
 }
 
 function getOrCreateUser(username) {
@@ -409,7 +418,7 @@ function createWindow() {
     }
   });
 
-  window.loadFile("index.html");
+  window.loadFile(path.join(__dirname, "index.html"));
 }
 
 app.whenReady().then(() => {
