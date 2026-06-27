@@ -2,6 +2,9 @@ const { app, BrowserWindow, ipcMain, dialog } = require("electron");
 const path = require("path");
 const Database = require("better-sqlite3");
 
+// Disable Chromium sandbox to prevent STATUS_DLL_NOT_FOUND (exit code -1073741515) in sandboxed renderer on Windows AppData installations
+app.commandLine.appendSwitch("no-sandbox");
+
 let db;
 
 const DOMAIN_BY_GAME_TYPE = Object.freeze({
@@ -417,6 +420,25 @@ function createWindow() {
       nodeIntegration: false
     }
   });
+
+  // Track if loading fails
+  window.webContents.on("did-fail-load", (event, errorCode, errorDescription, validatedURL) => {
+    dialog.showErrorBox(
+      "Failed to Load Resource",
+      `Failed to load URL: ${validatedURL}\nError: ${errorDescription} (${errorCode})`
+    );
+  });
+
+  // Track if renderer process crashes
+  window.webContents.on("render-process-gone", (event, details) => {
+    dialog.showErrorBox(
+      "Renderer Process Gone",
+      `Renderer process crashed or was killed:\nReason: ${details.reason}\nExit code: ${details.exitCode}`
+    );
+  });
+
+  // Open DevTools in production temporarily to debug the white screen
+  window.webContents.openDevTools();
 
   window.loadFile(path.join(__dirname, "index.html"));
 }
